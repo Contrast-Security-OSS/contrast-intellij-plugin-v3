@@ -1,0 +1,1 @@
+# contrast-intellij-plugin-v3
