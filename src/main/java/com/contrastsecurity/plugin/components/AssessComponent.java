@@ -70,6 +70,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -128,7 +129,10 @@ public class AssessComponent extends JBPanel {
   private final transient MyFileEditorListener myFileEditorListener;
   private final transient EditorWidgetActionProvider editorWidgetActionProvider;
 
+  @Getter @Setter private int flag;
+
   public AssessComponent(Project project, ContrastToolWindow toolWindow, Scheduler scheduler) {
+    this.flag = -1;
     this.project = project;
     this.contrastToolWindow = toolWindow;
     this.scheduler = scheduler;
@@ -205,6 +209,10 @@ public class AssessComponent extends JBPanel {
             }
           }
         });
+  }
+
+  public void setFilterTabAsSelected() {
+    assessTabs.setSelectedIndex(0);
   }
 
   /** Selects the current file tab from the Assess screen */
@@ -798,7 +806,9 @@ public class AssessComponent extends JBPanel {
 
                 new SubMenuCacheService().clear();
                 showPersistingInfoPopup(
-                    localizationUtil.getMessage(Constants.MESSAGES.RETRIEVING_VULNERABILITIES));
+                    localizationUtil.getMessage(Constants.MESSAGES.RETRIEVING_VULNERABILITIES)
+                        + " - "
+                        + Constants.ASSESS);
                 TraceFile vulnerabilitiesByFilter =
                     fetcher.fetchVulnerabilitiesByFilter(
                         applicationId, getAppliedFilter(filterComponent));
@@ -825,12 +835,15 @@ public class AssessComponent extends JBPanel {
                         vulnerabilitiesByFilter.getFileVulnerabilitiesData(),
                         vulnerabilitiesByFilter.getUnMappedTrace());
                     showSuccessPopup(
-                        localizationUtil.getMessage(Constants.MESSAGES.FETCHED_VULNERABILITIES));
+                        localizationUtil.getMessage(Constants.MESSAGES.FETCHED_VULNERABILITIES)
+                            + " - "
+                            + Constants.ASSESS);
+                    updateFlag();
                     SwingUtilities.invokeLater(
                         () -> {
                           myFileEditorListener.reopenActiveFile();
                           customLineMarkerProvider.refresh(project);
-                          editorWidgetActionProvider.refresh(project, true);
+                          editorWidgetActionProvider.refresh(project);
                         });
                   } else {
                     configureVulnerabilityReportPanel();
@@ -852,7 +865,7 @@ public class AssessComponent extends JBPanel {
                       }
                       myFileEditorListener.reopenActiveFile();
                       customLineMarkerProvider.refresh(project);
-                      editorWidgetActionProvider.refresh(project, true);
+                      editorWidgetActionProvider.refresh(project);
                     });
                 showInfoPopup(
                     localizationUtil.getMessage(Constants.MESSAGES.NO_APPLICATION_CONFIGURED));
@@ -1257,5 +1270,10 @@ public class AssessComponent extends JBPanel {
     if (currentWorker != null) {
       currentWorker.cancel(true);
     }
+  }
+
+  public void updateFlag() {
+    flag = 0;
+    contrastToolWindow.getScanComponent().setFlag(-1);
   }
 }

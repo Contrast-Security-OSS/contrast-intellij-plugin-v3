@@ -38,6 +38,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -69,7 +70,10 @@ public class ScanComponent extends JBPanel {
   private final transient CustomLineMarkerProvider customLineMarkerProvider;
   private final Scheduler scheduler;
 
+  @Getter @Setter private int flag;
+
   public ScanComponent(Project project, ContrastToolWindow toolWindow, Scheduler scheduler) {
+    flag = -1;
     this.project = project;
     this.contrastToolWindow = toolWindow;
     this.popupUtil = new PopupUtil(project);
@@ -106,6 +110,10 @@ public class ScanComponent extends JBPanel {
     setLayout(new BorderLayout());
     add(scanTabs, BorderLayout.CENTER);
     scanTabs.addChangeListener(e -> {});
+  }
+
+  public void setFilterTabAsSelected() {
+    scanTabs.setSelectedIndex(0);
   }
 
   /** Selects the current file tab from the Assess screen */
@@ -181,7 +189,7 @@ public class ScanComponent extends JBPanel {
         loadDefaultVulnerabilityReport();
         myFileEditorListener.reopenActiveFile();
         customLineMarkerProvider.refresh(project);
-        editorWidgetActionProvider.refresh(project, false);
+        editorWidgetActionProvider.refresh(project);
         showErrorPopup(
             localizationUtil.getMessage(Constants.MESSAGES.NO_CREDENTIAL_CONFIGURE_FOR_PROJECT));
       }
@@ -221,7 +229,9 @@ public class ScanComponent extends JBPanel {
             isCalling = true;
             runButton.setEnabled(false);
             showPersistingInfoPopup(
-                localizationUtil.getMessage(Constants.MESSAGES.RETRIEVING_VULNERABILITIES));
+                localizationUtil.getMessage(Constants.MESSAGES.RETRIEVING_VULNERABILITIES)
+                    + " - "
+                    + Constants.SCAN);
             ProjectVulnerabilities projectVulnerabilities =
                 fetcher.getVulnerabilitiesByAppliedFilter(projectId, appliedFilters);
             disposePersistingPopup();
@@ -237,7 +247,9 @@ public class ScanComponent extends JBPanel {
                     projectVulnerabilities.getVulnerabilities();
                 if (CollectionUtils.isNotEmpty(allVulnerabilities)) {
                   showSuccessPopup(
-                      localizationUtil.getMessage(Constants.MESSAGES.FETCHED_VULNERABILITIES));
+                      localizationUtil.getMessage(Constants.MESSAGES.FETCHED_VULNERABILITIES)
+                          + " - "
+                          + Constants.SCAN);
                   ScanVulnerabilityDTO cacheDTO = new ScanVulnerabilityDTO();
                   cacheDTO.setTotalVulnerabilities(allVulnerabilities.size());
                   cacheDTO.setMappedVulnerability(
@@ -251,11 +263,12 @@ public class ScanComponent extends JBPanel {
                   if (StringUtils.isNotEmpty(limitMessage)) {
                     showInfoPopup(limitMessage);
                   }
+                  updateFlag();
                   SwingUtilities.invokeLater(
                       () -> {
                         myFileEditorListener.reopenActiveFile();
                         customLineMarkerProvider.refresh(project);
-                        editorWidgetActionProvider.refresh(project, false);
+                        editorWidgetActionProvider.refresh(project);
                       });
                 } else {
                   loadDefaultCurrentFile();
@@ -359,5 +372,10 @@ public class ScanComponent extends JBPanel {
     if (worker != null) {
       worker.cancel(true);
     }
+  }
+
+  public void updateFlag() {
+    flag = 0;
+    contrastToolWindow.getAssessComponent().setFlag(-1);
   }
 }

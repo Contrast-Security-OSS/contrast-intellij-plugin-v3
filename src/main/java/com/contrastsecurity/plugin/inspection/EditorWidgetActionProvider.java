@@ -31,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
 public class EditorWidgetActionProvider implements InspectionWidgetActionProvider {
 
   private DefaultActionGroup cachedActionGroup;
-  private boolean isAssess;
 
   @Override
   public @Nullable AnAction createAction(@NotNull Editor editor) {
@@ -45,21 +44,25 @@ public class EditorWidgetActionProvider implements InspectionWidgetActionProvide
         if (content != null) {
           JComponent component = content.getComponent();
           if (component instanceof ContrastToolWindow contrastToolWindow) {
-            if (isAssess) {
-              AssessComponent assessComponent = contrastToolWindow.getAssessComponent();
+            AssessComponent assessComponent = contrastToolWindow.getAssessComponent();
+            ScanComponent scanComponent = contrastToolWindow.getScanComponent();
+            if (assessComponent.getFlag() > -1) {
               dataProvider = new EditorWidgetDataProvider(assessComponent, editor.getProject());
               loadActions(
                   dataProvider.getActions(), getAssessAction(contrastWindow, assessComponent));
-            }
-            if (!isAssess) {
-              ScanComponent scanComponent = contrastToolWindow.getScanComponent();
+              return cachedActionGroup;
+            } else if (scanComponent.getFlag() > -1) {
               dataProvider = new EditorWidgetDataProvider(scanComponent, editor.getProject());
               loadActions(dataProvider.getActions(), getScanAction(contrastWindow, scanComponent));
+              return cachedActionGroup;
+            } else {
+              cachedActionGroup = new DefaultActionGroup();
+              cachedActionGroup.add(new Action(ContrastIcons.CONTRAST));
+              return cachedActionGroup;
             }
           }
         }
       }
-      return cachedActionGroup;
     }
     return null;
   }
@@ -104,15 +107,10 @@ public class EditorWidgetActionProvider implements InspectionWidgetActionProvide
 
   private void loadActions(List<AnAction> actions, AnAction sourceAction) {
     cachedActionGroup = new DefaultActionGroup();
-    if (CollectionUtils.isEmpty(actions)) {
-      cachedActionGroup.add(new Action(ContrastIcons.CONTRAST));
-      return;
-    }
     cachedActionGroup.add(sourceAction);
-    actions.forEach(
-        action -> {
-          cachedActionGroup.add(action);
-        });
+    if (CollectionUtils.isNotEmpty(actions)) {
+      actions.forEach(action -> cachedActionGroup.add(action));
+    }
   }
 
   /** Refreshes the loaded Inspection Widgets based on the updated value */
@@ -128,10 +126,5 @@ public class EditorWidgetActionProvider implements InspectionWidgetActionProvide
         editor.getComponent().updateUI();
       }
     }
-  }
-
-  public void refresh(Project project, boolean isAssess) {
-    this.isAssess = isAssess;
-    refresh(project);
   }
 }

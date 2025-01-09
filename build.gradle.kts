@@ -57,6 +57,9 @@ dependencies {
     compileOnly("org.projectlombok:lombok:$projectlombok_lombok")
     annotationProcessor("org.projectlombok:lombok:$projectlombok_lombok")
 
+    // Failsafe
+    implementation("net.jodah:failsafe:1.1.1")
+
     // Contrast SDK
     implementation(files("contrast-plugin-sdk-1.15-SNAPSHOT.jar"))
 

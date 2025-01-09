@@ -68,10 +68,11 @@ public class ContrastToolWindow extends JBPanel {
     repaint();
   }
 
-  private void configureRefreshAction(AnAction action) {
+  private void configureRefreshAction(AnAction sourceAction, AnAction refreshAction) {
     JBPanel<?> actionsPanel = new JBPanel<>();
     DefaultActionGroup actions = new DefaultActionGroup();
-    actions.add(action);
+    actions.add(sourceAction);
+    actions.add(refreshAction);
     ActionToolbar actionToolbar =
         ActionManager.getInstance().createActionToolbar(ActionPlaces.TOOLBAR, actions, false);
     actionToolbar.setTargetComponent(actionToolbar.getComponent());
@@ -159,13 +160,13 @@ public class ContrastToolWindow extends JBPanel {
   private void loadAssessScreen() {
     configureMainActions();
     add(assessComponent, BorderLayout.CENTER);
-    configureRefreshAction(getAssessRefreshAction());
+    configureRefreshAction(getAssessAction(), getAssessRefreshAction());
   }
 
   private void loadScanScreen() {
     configureMainActions();
     add(scanComponent, BorderLayout.CENTER);
-    configureRefreshAction(getScanRefreshAction());
+    configureRefreshAction(getScanAction(), getScanRefreshAction());
   }
 
   private AnAction getAssessRefreshAction() {
@@ -218,5 +219,43 @@ public class ContrastToolWindow extends JBPanel {
         .getTemplatePresentation()
         .setText(localizationUtil.getMessage(Constants.TOOL_TIPS.REFRESH));
     return refreshAction;
+  }
+
+  private AnAction getAssessAction() {
+    AnAction assessAction =
+        new AnAction(ContrastIcons.ASSESS_ICON) {
+          @Override
+          public void actionPerformed(@NotNull AnActionEvent e) {
+            assessComponent.setFilterTabAsSelected();
+          }
+
+          @Override
+          public @NotNull ActionUpdateThread getActionUpdateThread() {
+            return ActionUpdateThread.EDT;
+          }
+        };
+    assessAction
+        .getTemplatePresentation()
+        .setText(localizationUtil.getMessage(Constants.TOOL_TIPS.ASSESS));
+    return assessAction;
+  }
+
+  private AnAction getScanAction() {
+    AnAction assessAction =
+        new AnAction(ContrastIcons.SCAN_ICON) {
+          @Override
+          public void actionPerformed(@NotNull AnActionEvent e) {
+            scanComponent.setFilterTabAsSelected();
+          }
+
+          @Override
+          public @NotNull ActionUpdateThread getActionUpdateThread() {
+            return ActionUpdateThread.EDT;
+          }
+        };
+    assessAction
+        .getTemplatePresentation()
+        .setText(localizationUtil.getMessage(Constants.TOOL_TIPS.SCAN));
+    return assessAction;
   }
 }

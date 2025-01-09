@@ -246,7 +246,6 @@ public class TagComponent extends JBPanel {
         existingTagComboBox.removeItem(selectedTag);
         existingTagComboBox.addItem(selectedTag);
       }
-      tagsInVulnerability.remove(selectedTag);
       if (!tagsToRemove.contains(selectedTag)) {
         tagsToRemove.add(selectedTag);
       }
@@ -345,6 +344,7 @@ public class TagComponent extends JBPanel {
   }
 
   private String getTagRequestBody() {
+    verifyTags();
     StringBuilder builder = new StringBuilder();
     builder.append("{\n");
     builder.append("\"traces_uuid\": [\n");
@@ -377,6 +377,17 @@ public class TagComponent extends JBPanel {
           builder.append(",");
         }
       }
+    }
+  }
+
+  private void verifyTags() {
+    if (CollectionUtils.isNotEmpty(tagsToRemove)) {
+      tagsToRemove.forEach(
+          tag -> {
+            if (tagsInVulnerability.contains(tag)) {
+              tagsInVulnerability.remove(tag);
+            }
+          });
     }
   }
 

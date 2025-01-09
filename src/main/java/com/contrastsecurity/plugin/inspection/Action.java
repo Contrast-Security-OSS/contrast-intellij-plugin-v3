@@ -52,6 +52,8 @@ public class Action extends AnAction {
           } else if (StringUtils.equals(source, Constants.SCAN)) {
             ScanComponent scanComponent = contrastToolWindow.getScanComponent();
             contrastWindow.show(scanComponent::showCurrentFileContainer);
+          } else {
+            contrastWindow.show();
           }
         }
       }

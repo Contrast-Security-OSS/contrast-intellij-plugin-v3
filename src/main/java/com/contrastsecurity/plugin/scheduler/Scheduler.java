@@ -115,10 +115,11 @@ public class Scheduler implements Serializable {
         cacheDataService.clearCacheById(projectId);
         cacheDataService.add(projectId, cacheDTO);
         scanComponent.loadVulnerabilityReport(projectId);
+        scanComponent.updateFlag();
         myFileEditorListener.reopenActiveFile();
-        editorWidgetActionProvider.refresh(project, false);
+        editorWidgetActionProvider.refresh(project);
       }
-      showPopup();
+      showPopup(Constants.SCAN);
     } else {
       cancel();
     }
@@ -141,10 +142,11 @@ public class Scheduler implements Serializable {
             traceFile.getTotalVulnerabilities(),
             traceFile.getFileVulnerabilitiesData(),
             traceFile.getUnMappedTrace());
+        assessComponent.updateFlag();
         myFileEditorListener.reopenActiveFile();
-        editorWidgetActionProvider.refresh(project, false);
+        editorWidgetActionProvider.refresh(project);
       }
-      showPopup();
+      showPopup(Constants.ASSESS);
     } else {
       cancel();
     }
@@ -173,7 +175,7 @@ public class Scheduler implements Serializable {
     }
   }
 
-  private void showPopup() {
+  private void showPopup(String source) {
     popupUtil.disposePopup();
     StringBuilder messageBuilder = new StringBuilder();
     messageBuilder.append(Constants.CONTRAST).append(":");
@@ -186,6 +188,8 @@ public class Scheduler implements Serializable {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy HH:mm:ss");
     String formattedDate = currentDateTime.format(formatter).toUpperCase();
     messageBuilder.append(formattedDate);
+    messageBuilder.append(" - ");
+    messageBuilder.append(source);
     popupUtil.showFadingPopupOnRootPane(messageBuilder.toString(), PopupUtil.PopupType.INFO);
   }
 }
