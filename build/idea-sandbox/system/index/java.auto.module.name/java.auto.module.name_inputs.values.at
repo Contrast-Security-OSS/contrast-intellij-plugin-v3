@@ -1,0 +1,28 @@
+/Header Record For PersistentHashMapValueStoragewiremockjaxb.apijwks.rsacglib.nodepjava.jwtjackson.corelogback.corejackson.databindjackson.annotationslogback.classic
+jcommanderitujffijffi
+handlebarshandlebars.helpers	classmate!jackson.module.parameter.namesjackson.datatype.jsr310jackson.datatype.jdk8jackson.dataformat.yamljackson.dataformat.toml	jsr305jcip.annotations
+jnr.x86asmjnr.unixsocket	jnr.posix	jnr.netdb
+jnr.ffi	jnr.enxiojnr.constants
+jnr.a64asm
+optionsinvokebinder	backport9j2objc.annotationslistenablefuturefailureaccesserror.prone.annotationsgsonguavaistack.commons.runtime	zxcvbnlang.tagoauth2.oidc.sdkcontent.typenimbus.jose.jwtjson.schema.validatorcommons.codec	json.pathHikariCPandroid.json
+xstream	jaxb.core	jaxb.implmicrometer.coremicrometer.commonsjjwt
+classgraphcommons.logging
+commons.iocommons.fileuploadundertow.websockets.jsrundertow.servlet	jandexxml.pathundertow.corerest.assuredrest.assured.common	json.pathmicrometer.observationmicrometer.jakarta9jakarta.xml.bind.apijakarta.websocket.client.apijakarta.websocket.apijakarta.validation.apijakarta.transaction.apijakarta.servlet.apijakarta.persistence.apijakarta.inject.apijakarta.annotation.apijakarta.activation.apiantlr4.runtimejopt.simple
+json.smartaccessors.smartjson.unit.corebyte.buddy.agent
+jitescript	joda.time
+byte.buddyjavax.activation.apihttpcore5.h2httpclient5
+groovy.xml	groovygroovy.jsoncommons.textcommons.lang3commons.execasciidoctorj.apiapiguardian.apitomcat.embed.ellog4j.to.slf4j	log4j.apihttpmimehttpcore
+httpclientchecker.qual	httpcore5
+tagsoup	jose4j
+awaitility
+attoparserassertj.coreaspectjweaverjetty.alpn.java.serverjetty.alpn.java.clientasciidoctorjjetty.alpn.clientjetty.jakarta.servlet.apihttp2.serverhttp2.hpackhttp2.commonangus.activation
+jetty.utiljetty.servletsjetty.servletjetty.serverjetty.securityjetty.proxyjetty.io
+jetty.httpjetty.clientjetty.alpn.server hibernate.commons.annotationsHdrHistogramhamcresthamcrest.coretxw2jaxb.runtime	jaxb.coreflyway.core	jetty.xmljetty.webapp	dirgrajonijcodingsxnio.nioxnio.apijboss.threadsjboss.logging	hsqldbjunit.jupiter.enginejunit.jupiter.paramsjunit.jupiter.apijsouphibernate.validatorjzlibjruby
+opentest4jjruby.stdlibhibernate.core	objenesismockito.junit.jupitermockito.coreLatencyUtilsjunit.platform.engine
+jruby.basejunit.platform.commonsjunit.jupiter
+jsonassert	lombokasmasm.utilasm.treeasm.commonsasm.analysisspring.boot.starter.data.jpaspring.boot.starter.aopspring.boot.starter.actuator"spring.boot.properties.migrator%"spring.boot.configuration.metadataspring.boot.actuator%"spring.boot.actuator.autoconfigurespring.boot.autoconfigure	slf4j.apijul.to.slf4jspring.boot.starter.web!spring.boot.starter.validationspring.boot.starter.undertow spring.boot.starter.thymeleafspring.boot.starter.testspring.boot.starter.security$!spring.boot.starter.oauth2.clientspring.boot.starter.loggingspring.boot.starter.jsonspring.boot.starter.jdbc spring.security.oauth2.clientspring.security.cryptospring.security.corespring.security.configspring.data.jpaspring.boot.testspring.boot.starter!spring.boot.test.autoconfigurespring.data.commons
+spring.aopspring.bootspring.security.webspring.security.testspring.security.oauth2.josespring.security.oauth2.core	spring.tx
+spring.ormspring.testspring.jdbc
+spring.jclspring.expressionspring.beansspring.corespring.contextspring.aspectswildfly.client.configwebjars.locator.core	jquery	bootstrap	unbescape	thymeleafthymeleaf.spring6# thymeleaf.extras.springsecurity6spring.webmvcxpp3.min
+xmlpull
+spring.webxml.resolver	snakeyamlxmlunit.placeholdersxmlunit.legacyxmlunit.corewildfly.common
