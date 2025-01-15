@@ -37,7 +37,7 @@ public class MouseHoverHandler {
   private SwingWorker<Void, Void> worker;
   private final AnnotationPopup annotationPopup;
 
-  private static final int POPUP_DELAY_MS = 2000; // 1 second delay
+  private static final int POPUP_DELAY_MS = 2000; // 2 second delay
 
   private Project project;
 

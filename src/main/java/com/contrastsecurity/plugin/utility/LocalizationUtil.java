@@ -26,7 +26,7 @@ public class LocalizationUtil implements Serializable {
   }
 
   /**
-   * Returns a single ton object of the LocalizationUtil
+   * Returns a singleton object of the LocalizationUtil
    *
    * @return LocalizationUtil
    */
