@@ -92,5 +92,5 @@
         <iw.actionProvider implementation="com.contrastsecurity.plugin.inspection.EditorWidgetActionProvider"/>
     </extensions>
     <!-- Plugin compatibility range -->
-    <idea-version since-build="242.20224.300" until-build="243.*"/>
+    <idea-version since-build="243.21565.193" until-build="243.*"/>
 </idea-plugin>

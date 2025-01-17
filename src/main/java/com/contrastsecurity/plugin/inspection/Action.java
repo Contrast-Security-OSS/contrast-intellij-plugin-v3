@@ -11,6 +11,8 @@ import com.contrastsecurity.plugin.toolwindow.ContrastToolWindow;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.actionSystem.ex.ActionUtil;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
@@ -58,9 +60,11 @@ public class Action extends AnAction {
   }
 
   @Override
-  public boolean displayTextInToolbar() {
-    return true;
+  public void update(@NotNull AnActionEvent e) {
+    Presentation presentation = e.getPresentation();
+    presentation.putClientProperty(ActionUtil.SHOW_TEXT_IN_TOOLBAR, true);
   }
+
 
   @Override
   public @NotNull ActionUpdateThread getActionUpdateThread() {
