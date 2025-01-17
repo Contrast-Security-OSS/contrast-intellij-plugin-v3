@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.contrastsecurity.plugin.fetchers.FetchersTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2025-01-09T06:51:40" hostname="sacumen-ThinkPad-E16-Gen-1" time="0.923">
+  <properties/>
+  <testcase name="testGetApplicationIdByName_Success()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.885"/>
+  <testcase name="testGetOrgName_Success()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.003"/>
+  <testcase name="testGetProjectNames_Success()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.003"/>
+  <testcase name="testGetApplicationIdByName_Failure()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.002"/>
+  <testcase name="testGetOrgName_Failure()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.002"/>
+  <testcase name="testFetchVulnerabilitiesByFilter_Success()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.003"/>
+  <testcase name="testGetProjectNames_Failure()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.002"/>
+  <testcase name="testGetBuildNumbersByApplicationID_Success()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.002"/>
+  <testcase name="testGetApplicationNames_Success()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.002"/>
+  <testcase name="testFetchVulnerabilitiesByFilter_Failure()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.001"/>
+  <testcase name="testGetBuildNumbersByApplicationID_Failure()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.001"/>
+  <testcase name="testGetServersByApplicationID_Success()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.002"/>
+  <testcase name="testGetApplicationNames_Failure()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.002"/>
+  <testcase name="testGetServersByApplicationID_Failure()" classname="com.contrastsecurity.plugin.fetchers.FetchersTest" time="0.002"/>
+  <system-out><![CDATA[12:21:41.160 [Test worker] DEBUG io.netty.util.internal.logging.InternalLoggerFactory -- Using SLF4J as the default logging framework
+12:21:41.164 [Test worker] DEBUG io.netty.util.concurrent.GlobalEventExecutor -- -Dio.netty.globalEventExecutor.quietPeriodSeconds: 1
+12:21:41.169 [Test worker] DEBUG io.netty.util.internal.InternalThreadLocalMap -- -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+12:21:41.170 [Test worker] DEBUG io.netty.util.internal.InternalThreadLocalMap -- -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+]]></system-out>
+  <system-err><![CDATA[Configuration file for j.u.l.LogManager does not exist: /home/sunitha/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2024.3/2f17172e656435984eb90124f488a9d828f2304/ideaIC-2024.3/test-log.properties
+WARNING: A Java agent has been loaded dynamically (/tmp/byteBuddyAgent17744676920653743203.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+SLF4J(W): Class path contains multiple SLF4J providers.
+SLF4J(W): Found provider [ch.qos.logback.classic.spi.LogbackServiceProvider@299321e2]
+SLF4J(W): Found provider [org.slf4j.jul.JULServiceProvider@23fb172e]
+SLF4J(W): See https://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J(I): Actual provider is of type [ch.qos.logback.classic.spi.LogbackServiceProvider@299321e2]
+]]></system-err>
+</testsuite>
