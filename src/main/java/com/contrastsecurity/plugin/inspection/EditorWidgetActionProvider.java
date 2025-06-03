@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+
 package com.contrastsecurity.plugin.inspection;
 
 import com.contrastsecurity.plugin.components.AssessComponent;
@@ -57,6 +58,7 @@ public class EditorWidgetActionProvider implements InspectionWidgetActionProvide
               return cachedActionGroup;
             } else {
               cachedActionGroup = new DefaultActionGroup();
+
               cachedActionGroup.add(new Action(ContrastIcons.CONTRAST));
               return cachedActionGroup;
             }

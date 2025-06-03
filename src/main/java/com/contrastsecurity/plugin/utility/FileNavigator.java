@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
+ *******************************************************************************/
+
 package com.contrastsecurity.plugin.utility;
 
 import com.contrastsecurity.plugin.constants.Constants;
@@ -5,9 +10,8 @@ import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import groovy.util.logging.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
-@lombok.extern.slf4j.Slf4j
 @Slf4j
 public class FileNavigator {
   private Editor editor;

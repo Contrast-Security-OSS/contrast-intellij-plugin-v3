@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
 
 package com.contrastsecurity.plugin.service;
@@ -33,7 +33,7 @@ class CacheDataServiceTest {
   private CacheDataService cacheDataService;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     this.cacheDataService = new CacheDataService();
     // Initialize the cache manager before all tests
     CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder().build(true);
@@ -42,7 +42,7 @@ class CacheDataServiceTest {
   }
 
   @AfterEach
-  public void tearDown() {
+  void tearDown() {
     // Ensure the cache manager is closed properly
     cacheDataService.close();
   }

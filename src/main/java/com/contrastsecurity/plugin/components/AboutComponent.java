@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
+ *******************************************************************************/
+
 package com.contrastsecurity.plugin.components;
 
 import com.contrastsecurity.plugin.constants.Constants;
@@ -79,6 +84,10 @@ public class AboutComponent extends JBPanel {
           }
         };
     JBTable detailTable = new JBTable(tableModel);
+    detailTable.setRowSelectionAllowed(false);
+    detailTable.setColumnSelectionAllowed(false);
+    detailTable.setCellSelectionEnabled(false);
+    detailTable.setFocusable(false);
     detailTable.setRowHeight(40);
     detailTable.setPreferredSize(new Dimension(500, 200));
     Border tableBorder = BorderFactory.createLineBorder(JBColor.BLACK);

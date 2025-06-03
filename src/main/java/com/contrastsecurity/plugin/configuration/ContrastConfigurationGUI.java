@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+
 package com.contrastsecurity.plugin.configuration;
 
 import com.contrastsecurity.plugin.constants.Constants;
@@ -10,6 +11,7 @@ import com.contrastsecurity.plugin.fetchers.Fetcher;
 import com.contrastsecurity.plugin.models.ConfigurationDTO;
 import com.contrastsecurity.plugin.persistent.CredentialDetailsService;
 import com.contrastsecurity.plugin.toolwindow.ContrastToolWindow;
+import com.contrastsecurity.plugin.utility.ComponentUtil;
 import com.contrastsecurity.plugin.utility.CredentialUtil;
 import com.contrastsecurity.plugin.utility.LocalizationUtil;
 import com.contrastsecurity.plugin.utility.PopupUtil;
@@ -218,6 +220,7 @@ public class ContrastConfigurationGUI extends JBPanel {
             LafManagerListener.TOPIC,
             (LafManagerListener)
                 source -> SwingUtilities.updateComponentTreeUI(ContrastConfigurationGUI.this));
+    ComponentUtil.defaultToPanelOnMouseClick(this);
   }
 
   /**

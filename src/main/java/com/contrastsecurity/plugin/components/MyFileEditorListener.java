@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+
 package com.contrastsecurity.plugin.components;
 
 import com.contrastsecurity.assess.v3.dto.TraceFile;
@@ -34,6 +35,7 @@ public class MyFileEditorListener implements FileEditorManagerListener {
   private ScanComponent scanComponent;
   private AssessComponent assessComponent;
   private final CacheDataService cacheDataService = new CacheDataService();
+  private VirtualFile lastLoadedFile;
 
   @Getter @Setter private TraceFile vulnerabilities;
 
@@ -59,12 +61,18 @@ public class MyFileEditorListener implements FileEditorManagerListener {
 
   @Override
   public void selectionChanged(@NotNull FileEditorManagerEvent event) {
-    VirtualFile[] selectedFiles = FileEditorManager.getInstance(project).getSelectedFiles();
-    if (selectedFiles.length > 0) {
-      loadReportForSelectedFile(selectedFiles[0]);
+    VirtualFile selectedFile = event.getNewFile();
+
+    if (selectedFile != null) {
+      if (!selectedFile.equals(lastLoadedFile)) {
+        lastLoadedFile = selectedFile;
+        loadReportForSelectedFile(selectedFile);
+      } else {
+        log.debug("Same file re-selected, skipping reload: {}", selectedFile.getName());
+      }
     } else {
-      ToolWindowManager instance = ToolWindowManager.getInstance(Objects.requireNonNull(project));
-      ToolWindow contrastWindow = instance.getToolWindow("Contrast");
+      lastLoadedFile = null; // Reset since there's no active file
+      ToolWindow contrastWindow = ToolWindowManager.getInstance(project).getToolWindow("Contrast");
       if (contrastWindow != null) {
         Content content =
             contrastWindow.getContentManager().getContent(0); // Assuming the first tab

@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
+ *******************************************************************************/
+
 package com.contrastsecurity.plugin.models;
 
 import lombok.Getter;

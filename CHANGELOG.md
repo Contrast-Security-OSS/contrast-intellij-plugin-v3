@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.1]- 2025-27-05
+### Added
+- Updated making it compatible with 2025.1*
+
 ## [1.0.0] - 2025-01-01
 
 ### Added

@@ -1,12 +1,14 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+import java.util.Locale
 
 val commons_lang3 = "3.17.0"
 val slf4j_api = "2.0.16"
 val logback_classic = "1.4.6"
 val junit = "4.13.2"
+val contrast_plugin_sdk = "1.15"
 val projectlombok_lombok = "1.18.34"
 val ehcache = "3.10.8:jakarta"
 val mockito_core = "5.13.0"
@@ -21,7 +23,7 @@ buildscript {
 
 plugins {
     java
-    id("org.jetbrains.intellij") version "1.17.3"
+    id("org.jetbrains.intellij") version "1.17.4"
     kotlin("jvm") version "1.8.10"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10" // Optional: If you need serialization support
 }
@@ -31,7 +33,7 @@ configurations.all {
 }
 
 group = "com.contrastsecurity"
-version = "1.0.0"
+version = "1.0.1"
 
 
 repositories {
@@ -57,14 +59,13 @@ dependencies {
     compileOnly("org.projectlombok:lombok:$projectlombok_lombok")
     annotationProcessor("org.projectlombok:lombok:$projectlombok_lombok")
 
-    // Failsafe
-    implementation("net.jodah:failsafe:1.1.1")
-
     // Contrast SDK
     implementation(files("contrast-plugin-sdk-1.15-SNAPSHOT.jar"))
 
     // EHCache
     implementation("org.ehcache:ehcache:$ehcache")
+
+    implementation("net.jodah:failsafe:1.1.1")
 }
 
 // Configure Gradle IntelliJ Plugin
@@ -101,6 +102,6 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("242.20224.300")  // Set the minimum supported IntelliJ IDEA build
-        untilBuild.set("243.*")           // Set the maximum supported IntelliJ IDEA build
+        untilBuild.set("251.*")           // Set the maximum supported IntelliJ IDEA build
     }
 }

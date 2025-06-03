@@ -42,3 +42,28 @@ environment: http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/s
 * Build the project
 * Open Gradle tool window and run "runIdea" task, which is inside the "intellij" task folder.
 * A separate instance of IntelliJ IDEA should be launched with the plugin installed.
+
+Contrast IDE Plugin Features
+1. Configuration Setting Screen
+![Configuration Screen.png](src/main/resources/screens/Configuration%20Screen.png)
+2. About Page
+![About Page.png](../../../../Downloads/IntelliJ%20Screens-20250529T053644Z-1-001/IntelliJ%20Screens/About%20Page.png)![About Page.png](src/main/resources/screens/About%20Page.png)
+
+3. Scan
+3.1 Filter
+![Scan Filter.png](../../../../Downloads/IntelliJ%20Screens-20250529T053644Z-1-001/IntelliJ%20Screens/Scan%20Filter.png)![Scan Filter.png](src/main/resources/screens/Scan%20Filter.png)
+
+3.2 Current File
+![Current File Scan.png](src/main/resources/screens/Current%20File%20Scan.png)
+3.3 Vulnerability Report
+![Vulnerability Report Scan.png](src/main/resources/screens/Vulnerability%20Report%20Scan.png)
+
+4. Assess
+4.1 Retrieve Vulnerability
+![Assess Filter.png](src/main/resources/screens/Assess%20Filter.png)
+
+4.2 Current File
+![Current File Assess.png](src/main/resources/screens/Current%20File%20Assess.png)
+
+4.3 Vulnerability Report
+![Vulnerability Report Assess.png](src/main/resources/screens/Vulnerability%20Report%20Assess.png)

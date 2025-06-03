@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+
 package com.contrastsecurity.plugin.components;
 
 import com.contrastsecurity.plugin.annotation.CustomLineMarkerProvider;
@@ -16,6 +17,7 @@ import com.contrastsecurity.plugin.service.CacheDataService;
 import com.contrastsecurity.plugin.toolwindow.ContrastToolWindow;
 import com.contrastsecurity.plugin.tree.CurrentFileTree;
 import com.contrastsecurity.plugin.tree.VulnerabilityReportTree;
+import com.contrastsecurity.plugin.utility.ComponentUtil;
 import com.contrastsecurity.plugin.utility.CredentialUtil;
 import com.contrastsecurity.plugin.utility.LocalizationUtil;
 import com.contrastsecurity.plugin.utility.PopupUtil;
@@ -96,6 +98,9 @@ public class ScanComponent extends JBPanel {
     configureDefaultCurrentFileContainer();
     configureVulnerabilityReportContainer();
     configureTabsPanel();
+    ComponentUtil.defaultToPanelOnMouseClick(filterContainer);
+    ComponentUtil.defaultToPanelOnMouseClick(currentFileContainer);
+    ComponentUtil.defaultToPanelOnMouseClick(vulnerabilityReportContainer);
   }
 
   private void configureTabsPanel() {

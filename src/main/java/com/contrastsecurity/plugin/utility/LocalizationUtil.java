@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, Inc.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+
 package com.contrastsecurity.plugin.utility;
 
 import com.contrastsecurity.plugin.constants.Constants;
@@ -26,7 +27,7 @@ public class LocalizationUtil implements Serializable {
   }
 
   /**
-   * Returns a singleton object of the LocalizationUtil
+   * Returns a single ton object of the LocalizationUtil
    *
    * @return LocalizationUtil
    */
