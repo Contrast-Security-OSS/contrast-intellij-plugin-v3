@@ -1,2 +1,0 @@
-#!/bin/sh
-"/home/sunitha/.gradle/caches/modules-2/files-2.1/com.jetbrains/jbre/jbr_jcef-21.0.5-linux-x64-b631.16/extracted/jbr_jcef-21.0.5-linux-x64-b631.16/bin/java" -cp "/home/sunitha/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2024.3/2f17172e656435984eb90124f488a9d828f2304/ideaIC-2024.3/lib/externalProcess-rt.jar" externalApp.nativessh.NativeSshAskPassApp "$@"
