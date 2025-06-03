@@ -26,23 +26,6 @@ buildPlugin:
 run:
 	$(GRADLEW) runIde $(GRADLEW_ARGS)
 
-.PHONY: lint
-lint:
-	$(GRADLEW) spotlessCheck checkstyleMain checkstyleTest $(GRADLEW_ARGS)
-
-#checkstyleMain checkstyleTest
-.PHONY: fmt
-fmt:
-	$(GRADLEW) spotlessApply $(GRADLEW_ARGS)
-
-.PHONY: coverageVerification
-coverageVerification:
-	$(GRADLEW) build jacocoTestCoverageVerification $(GRADLEW_ARGS)
-
-.PHONY: dependency-tree
-dependency-tree:
-	$(GRADLEW) dependencies $(GRADLEW_ARGS)
-
 .PHONY: toolchain
 toolchain:
 	docker build -f Dockerfile.toolchain -t local/contrast-intellij-plugin .
