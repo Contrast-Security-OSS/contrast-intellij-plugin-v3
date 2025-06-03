@@ -1,0 +1,70 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+  <version>1.0.1</version>
+  <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+  <id>com.contrastsecurity.ide</id>
+  <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+  <!-- TODO  -->
+  <!-- Need to be verified and updated in future  -->
+  <name>Contrast IDE</name>
+  <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+  <!-- TODO  -->
+  <!-- Need to be verified and updated in future  -->
+  <vendor email="contrastintegrations@contrastsecurity.com" url="https://www.contrastsecurity.com">Contrast Security</vendor>
+  <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+  <!-- TODO  -->
+  <!-- Need to be verified and updated in future  -->
+  <description><![CDATA[<p>By integrating the Contrast Security IntelliJ plugin into your IDE, you are able to quickly map vulnerabilities to your source code directly at the file and line number by importing your IAST <br> or SAST vulnerabilities from your latest sessions or scans, getting actionable information on each of the vulnerabilities found.</p>
+        <p>The IDE plugin provides these features:</p>
+        <ul>
+            <li><strong>Comprehensive vulnerability analysis:</strong> The extension allows you to connect your IDE to the Contrast Platform and analyze any of your IAST Applications or SAST projects directly within <br> the IDE. See vulnerability summaries right at the file and line number, highlighting the risk and providing a short summary of remediation you can take, or follow the link back to the <br> Contrast platform.</li>
+            <li><strong>Broad language and framework support:</strong> Contrast Security covers commonly supported languages across IntelliJ community edition their AST platform.</li>
+        </ul>]]></description>
+  <change-notes><![CDATA[<p>This is the launch of Contrast Securities IntelliJ IDE plugin, version 1.0.1. The following represent the features and capabilities in the initial release</p>
+        <ul>
+        <li><strong>Added support for Contrast Assess Interactive Application Security Testing (IAST)</strong></li>
+        <li><strong>Added support for Contrast Scan Static Application Security Testing (SAST)</strong></li>
+        <li>Added the ability to connect to your Contrast Organisation and obtain a list of Applications (IAST) and Projects (SAST)</li>
+        <li>Added the ability to retrieve vulnerabilities (IAST and SAST) and display them in the IDE</li>
+        <li>Added the ability to see which line of code has a vulnerability through clear indicators</li>
+        <li>Added the ability to hover over the affected line of code to see a short description and severity of the vulnerability</li>
+        <li>Added indicators on screen of the total number of vulnerabilities, by severity, in the file you have opened</li>
+        <li>Added the ability to filter the list of vulnerabilities retrieved by severity (IAST and SAST), Status (IAST and SAST), and by session metadata (IAST)</li>
+        <li>Added the ability to set tags (IAST) and change the status of a vulnerability (IAST, SAST)</li>
+        <li>Supports Windows 11, Ubuntu Linux 22.04 LTS and macOS Sequoia 15.2</li>
+        </ul>]]></change-notes>
+  <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+  <depends>com.intellij.modules.platform</depends>
+  <actions>
+    <!-- Define the "Contrast" group -->
+    <group id="ContrastMenu" text="Contrast" popup="true" icon="/icons/toolwindowIcon.png">
+      <!-- Define the "Test1" action under Contrast -->
+      <action id="Scan" class="com.contrastsecurity.plugin.actions.RetrieveVulnerabilitiesAction" text="Retrieve Vulnerabilities" icon="/icons/scan.png" />
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last" />
+    </group>
+  </actions>
+  <applicationListeners>
+    <listener class="com.contrastsecurity.plugin.service.ProjectCloseListener" topic="com.intellij.openapi.project.ProjectManagerListener" />
+  </applicationListeners>
+  <projectListeners>
+    <listener class="com.contrastsecurity.plugin.components.MyFileEditorListener" topic="com.intellij.openapi.fileEditor.FileEditorManagerListener" />
+  </projectListeners>
+  <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add custom toolwindow -->
+    <toolWindow factoryClass="com.contrastsecurity.plugin.toolwindow.ContrastToolWindowFactory" id="Contrast" secondary="false" anchor="bottom" icon="/icons/toolwindowIcon.png" />
+    <!-- Add Contrast settings to main Settings-->
+    <applicationConfigurable displayName="Contrast" instance="com.contrastsecurity.plugin.configuration.ContrastConfiguration" />
+    <applicationService serviceImplementation="com.contrastsecurity.plugin.persistent.CredentialDetailsService" />
+    <!-- Register Inline Annotation-->
+    <codeInsight.lineMarkerProvider language="" implementationClass="com.contrastsecurity.plugin.annotation.CustomLineMarkerProvider" />
+    <iw.actionProvider implementation="com.contrastsecurity.plugin.inspection.EditorWidgetActionProvider" />
+  </extensions>
+  <!-- Plugin compatibility range -->
+  <idea-version since-build="242.20224.300" until-build="251.*" />
+</idea-plugin>

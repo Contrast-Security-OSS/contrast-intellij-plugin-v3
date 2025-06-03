@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.contrastsecurity.plugin.service.CacheDataServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-06-03T12:05:42.596Z" hostname="Msalman-Latitude-3520" time="0.217">
+  <properties/>
+  <testcase name="testCache()" classname="com.contrastsecurity.plugin.service.CacheDataServiceTest" time="0.217"/>
+  <system-out><![CDATA[17:35:42.636 [Test worker] DEBUG org.ehcache.core.spi.ServiceLocator -- Starting 17 Services...
+17:35:42.639 [Test worker] DEBUG org.ehcache.core.internal.statistics.DefaultStatisticsService -- Starting service
+17:35:42.639 [Test worker] DEBUG org.ehcache.core.spi.ServiceLocator -- All Services successfully started, 17 Services in 3ms
+17:35:42.640 [Test worker] DEBUG org.ehcache.core.EhcacheManager -- Creating Cache 'myCache' in EhcacheManager.
+17:35:42.642 [Test worker] DEBUG org.ehcache.impl.internal.spi.serialization.DefaultSerializationProvider -- Serializer for <java.lang.String> : org.ehcache.impl.serialization.StringSerializer@56b78e55
+17:35:42.643 [Test worker] DEBUG org.ehcache.core.EhcacheManager -- Could not create serializers for myCache
+org.ehcache.spi.serialization.UnsupportedTypeException: No serializer found for type 'java.lang.Object'
+	at org.ehcache.impl.internal.spi.serialization.DefaultSerializationProvider.getSerializerClassFor(DefaultSerializationProvider.java:136)
+	at org.ehcache.impl.internal.spi.serialization.DefaultSerializationProvider.createSerializer(DefaultSerializationProvider.java:98)
+	at org.ehcache.impl.internal.spi.serialization.DefaultSerializationProvider.createValueSerializer(DefaultSerializationProvider.java:90)
+	at org.ehcache.core.EhcacheManager.getStore(EhcacheManager.java:469)
+	at org.ehcache.core.EhcacheManager.createNewEhcache(EhcacheManager.java:346)
+	at org.ehcache.core.EhcacheManager.createCache(EhcacheManager.java:274)
+	at org.ehcache.core.EhcacheManager.init(EhcacheManager.java:589)
+	at org.ehcache.config.builders.CacheManagerBuilder.build(CacheManagerBuilder.java:70)
+	at com.contrastsecurity.plugin.configuration.ContrastCacheConfiguration.initializeCache(ContrastCacheConfiguration.java:52)
+	at com.contrastsecurity.plugin.configuration.ContrastCacheConfiguration.getCache(ContrastCacheConfiguration.java:35)
+	at com.contrastsecurity.plugin.service.CacheDataService.<init>(CacheDataService.java:19)
+	at com.contrastsecurity.plugin.service.CacheDataServiceTest.setUp(CacheDataServiceTest.java:37)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:727)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at com.intellij.testFramework.junit5.impl.TestLoggerInterceptor.intercept$lambda$0(TestLoggerInterceptor.kt:12)
+	at com.intellij.testFramework.TestLoggerKt.recordErrorsLoggedInTheCurrentThreadAndReportThemAsFailures(testLogger.kt:77)
+	at com.intellij.testFramework.junit5.impl.TestLoggerInterceptor.intercept(TestLoggerInterceptor.kt:11)
+	at com.intellij.testFramework.junit5.impl.AbstractInvocationInterceptor.interceptBeforeEachMethod(AbstractInvocationInterceptor.kt:25)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptLifecycleMethod(TimeoutExtension.java:128)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptBeforeEachMethod(TimeoutExtension.java:78)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeMethodInExtensionContext(ClassBasedTestDescriptor.java:520)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$synthesizeBeforeEachMethodAdapter$23(ClassBasedTestDescriptor.java:505)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeBeforeEachMethods$3(TestMethodTestDescriptor.java:174)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeBeforeMethodsOrCallbacksUntilExceptionOccurs$6(TestMethodTestDescriptor.java:202)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeBeforeMethodsOrCallbacksUntilExceptionOccurs(TestMethodTestDescriptor.java:202)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeBeforeEachMethods(TestMethodTestDescriptor.java:171)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:134)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:124)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:99)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:94)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:63)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:92)
+	at jdk.proxy1/jdk.proxy1.$Proxy4.stop(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:200)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:132)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:103)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:63)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:122)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:72)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+17:35:42.654 [Test worker] DEBUG org.ehcache.impl.internal.spi.copy.DefaultCopyProvider -- Copier for <java.lang.String> : org.ehcache.impl.copy.IdentityCopier@5a021cb9
+17:35:42.654 [Test worker] DEBUG org.ehcache.impl.internal.spi.copy.DefaultCopyProvider -- Copier for <java.lang.Object> : org.ehcache.impl.copy.IdentityCopier@51768776
+17:35:42.663 [Test worker] DEBUG org.ehcache.impl.internal.store.heap.OnHeapStore -- No expiration strategy detected
+17:35:42.686 [Test worker] DEBUG org.ehcache.core.StatusTransitioner -- {cache-alias=myCache}Initialize successful.
+17:35:42.686 [Test worker] INFO org.ehcache.core.EhcacheManager -- Cache 'myCache' created in EhcacheManager.
+17:35:42.687 [Test worker] DEBUG org.ehcache.core.internal.statistics.DefaultStatisticsService -- Moving from UNINITIALIZED to AVAILABLE
+17:35:42.687 [Test worker] DEBUG org.ehcache.core.internal.statistics.DefaultStatisticsService -- Cache added myCache
+17:35:42.692 [Test worker] DEBUG org.ehcache.core.StatusTransitioner -- Initialize successful.
+17:35:42.695 [Test worker] DEBUG org.ehcache.core.spi.ServiceLocator -- Starting 17 Services...
+17:35:42.695 [Test worker] DEBUG org.ehcache.core.internal.statistics.DefaultStatisticsService -- Starting service
+17:35:42.696 [Test worker] DEBUG org.ehcache.core.spi.ServiceLocator -- All Services successfully started, 17 Services in 1ms
+17:35:42.696 [Test worker] DEBUG org.ehcache.core.internal.statistics.DefaultStatisticsService -- Moving from UNINITIALIZED to AVAILABLE
+17:35:42.696 [Test worker] DEBUG org.ehcache.core.StatusTransitioner -- Initialize successful.
+17:35:42.809 [Test worker] DEBUG org.ehcache.core.spi.ServiceLocator -- Stopping 17 Services...
+17:35:42.813 [Test worker] DEBUG org.ehcache.core.internal.statistics.DefaultStatisticsService -- Stopping service
+17:35:42.813 [Test worker] DEBUG org.ehcache.core.spi.ServiceLocator -- All Services successfully stopped, 17 Services in 4ms
+17:35:42.813 [Test worker] DEBUG org.ehcache.core.StatusTransitioner -- Close successful.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
