@@ -1,8 +1,5 @@
 .gradle
-<<<<<<< HEAD
-
-=======
->>>>>>> main
+build
 #gradle/
 gradlew.bat
 gradlew
