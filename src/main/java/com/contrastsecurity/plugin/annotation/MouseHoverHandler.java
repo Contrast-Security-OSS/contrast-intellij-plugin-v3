@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2025 Contrast Security, Inc.
+ * Copyright © 2025 Contrast Security, OSS.
  * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
 package com.contrastsecurity.plugin.annotation;
