@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, OSS.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
 package com.contrastsecurity.plugin.annotation;
 
@@ -12,10 +12,12 @@ import com.contrastsecurity.plugin.service.SubMenuCacheService;
 import com.contrastsecurity.plugin.utility.CredentialUtil;
 import com.contrastsecurity.scan.dto.Vulnerability;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.event.EditorFactoryEvent;
+import com.intellij.openapi.editor.event.EditorFactoryListener;
 import com.intellij.openapi.editor.event.EditorMouseEvent;
 import com.intellij.openapi.editor.event.EditorMouseListener;
 import com.intellij.openapi.editor.event.EditorMouseMotionListener;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -36,66 +38,84 @@ public class MouseHoverHandler {
   private Timer popupTimer;
   private SwingWorker<Void, Void> worker;
   private final AnnotationPopup annotationPopup;
+  private static final int POPUP_DELAY_MS = 2000;
 
-  private static final int POPUP_DELAY_MS = 2000; // 2 second delay
-
-  private Project project;
+  private final Project project;
 
   public MouseHoverHandler(Map<Integer, AnnotationPopupDTO> popupDTOMap, Project project) {
     this.project = project;
     this.popupDTOMap = popupDTOMap;
-    annotationPopup = new AnnotationPopup();
-    popupTimer =
-        new Timer(
-            POPUP_DELAY_MS, e -> showPopupForEvent(currentEvent)); // Show popup after the delay
-    popupTimer.setRepeats(false); // Timer should not repeat
+    this.annotationPopup = new AnnotationPopup();
+    this.popupTimer = new Timer(POPUP_DELAY_MS, e -> showPopupForEvent(currentEvent));
+    popupTimer.setRepeats(false);
   }
 
-  /** Adds Annotation popup messages for the provided Editor object */
+  /** Adds listeners to all editors including detached windows */
   public void addMouseHoverListener() {
+    EditorFactory factory = EditorFactory.getInstance();
 
-    Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-
-    if (editor != null) {
-      editor.addEditorMouseMotionListener(
-          new EditorMouseMotionListener() {
-            @Override
-            public void mouseMoved(@NotNull EditorMouseEvent e) {
-              int offset = e.getOffset();
-              int line = editor.getDocument().getLineNumber(offset);
-
-              // Check if there's a popup for this line
-              if (popupDTOMap.containsKey(line)) {
-                currentEvent = e;
-
-                // Start the popup timer if the popup is not already shown
-                if (!isPopupShown) {
-                  popupTimer.start();
-                }
-              } else {
-                // Hide popup if the mouse is neither on the vulnerable line nor inside the popup
-                hidePopupIfShown();
-                popupTimer.stop(); // Stop the timer if moving away
-              }
-            }
-          });
-
-      editor.addEditorMouseListener(
-          new EditorMouseListener() {
-            @Override
-            public void mouseClicked(@NotNull EditorMouseEvent e) {
-              // Hide the popup if clicked outside of it
-              hidePopupIfShown();
-              popupTimer.stop(); // Stop the timer on mouse click
-            }
-          });
+    // 1. Attach to all currently open editors
+    for (Editor editor : factory.getAllEditors()) {
+      if (editor.getProject() == project) {
+        addHoverListenersToEditor(editor);
+      }
     }
+
+    // 2. Attach to all future editors
+    factory.addEditorFactoryListener(
+        new EditorFactoryListener() {
+          @Override
+          public void editorCreated(@NotNull EditorFactoryEvent event) {
+            Editor editor = event.getEditor();
+            if (editor.getProject() == project) {
+              addHoverListenersToEditor(editor);
+            }
+          }
+
+          @Override
+          public void editorReleased(@NotNull EditorFactoryEvent event) {
+            // Optional: clean up if needed
+          }
+        },
+        project // ensures listener is removed when project is disposed
+        );
+  }
+
+  private void addHoverListenersToEditor(Editor editor) {
+    editor.addEditorMouseMotionListener(
+        new EditorMouseMotionListener() {
+          @Override
+          public void mouseMoved(@NotNull EditorMouseEvent e) {
+            int offset = e.getOffset();
+            int line = editor.getDocument().getLineNumber(offset);
+
+            if (popupDTOMap.containsKey(line)) {
+              currentEvent = e;
+              if (!isPopupShown) {
+                popupTimer.restart();
+              }
+            } else {
+              hidePopupIfShown();
+              popupTimer.stop();
+            }
+          }
+        },
+        project);
+
+    editor.addEditorMouseListener(
+        new EditorMouseListener() {
+          @Override
+          public void mouseClicked(@NotNull EditorMouseEvent e) {
+            hidePopupIfShown();
+            popupTimer.stop();
+          }
+        },
+        project);
   }
 
   private void showPopupForEvent(EditorMouseEvent e) {
-    if (popupDTOMap.isEmpty()) {
-      return;
-    }
+    if (popupDTOMap.isEmpty()) return;
+
     int offset = e.getOffset();
     Editor editor = e.getEditor();
     int line = editor.getDocument().getLineNumber(offset);
@@ -107,60 +127,42 @@ public class MouseHoverHandler {
       } else {
         loadScanAdvice(dto, e);
       }
-    } else {
-      log.warn("No popup found");
     }
-  }
-
-  private boolean isMouseOverLine(EditorMouseEvent e) {
-    int offset = e.getOffset();
-    Editor editor = e.getEditor();
-    int line = editor.getDocument().getLineNumber(offset);
-    return popupDTOMap.containsKey(line);
   }
 
   private void hidePopupIfShown() {
     if (isPopupShown && !isMouseOverPopup) {
       annotationPopup.hidePopUp();
       isPopupShown = false;
-      popupTimer.stop(); // Stop the timer when hiding the popup
+      popupTimer.stop();
     }
   }
 
   private void loadScanAdvice(AnnotationPopupDTO dto, EditorMouseEvent e) {
-    // Check in cache
     SubMenuCacheService subMenuCacheService = new SubMenuCacheService();
     Object cache = subMenuCacheService.get(dto.getProjectId() + "-" + dto.getVulnerabilityId());
-    if (cache != null) {
-      Vulnerability vulnerability = (Vulnerability) cache;
+    if (cache instanceof Vulnerability vulnerability) {
       String risk = vulnerability.getRisk();
-      if (StringUtils.isNotEmpty(risk)) {
-        dto.setAdvice(risk);
-      } else {
-        dto.setAdvice("No Advice found");
-      }
+      dto.setAdvice(StringUtils.defaultIfEmpty(risk, "No Advice found"));
       invokePopup(dto, e);
     } else {
-      // Make API call
       makeAPICall(dto.getProjectId(), dto.getVulnerabilityId(), dto, e);
     }
   }
 
   private void invokePopup(AnnotationPopupDTO dto, EditorMouseEvent e) {
-    annotationPopup.hidePopUp(); // Hide any existing popup
+    annotationPopup.hidePopUp();
     annotationPopup.showAnnotationPopup(
         dto,
         e.getMouseEvent(),
         new MouseAdapter() {
           @Override
           public void mouseEntered(MouseEvent e) {
-            // Mouse entered the popup, keep the popup visible
             isMouseOverPopup = true;
           }
 
           @Override
           public void mouseExited(MouseEvent e) {
-            // Mouse exited the popup, hide it only if the mouse is not on the line
             isMouseOverPopup = false;
             if (!isMouseOverLine(currentEvent)) {
               hidePopupIfShown();
@@ -170,11 +172,17 @@ public class MouseHoverHandler {
     isPopupShown = true;
   }
 
+  private boolean isMouseOverLine(EditorMouseEvent e) {
+    int offset = e.getOffset();
+    Editor editor = e.getEditor();
+    int line = editor.getDocument().getLineNumber(offset);
+    return popupDTOMap.containsKey(line);
+  }
+
   private void makeAPICall(
       String projectID, String vulnerabilityID, AnnotationPopupDTO dto, EditorMouseEvent e) {
-    if (worker != null) {
-      return;
-    }
+    if (worker != null) return;
+
     ConfigurationDTO savedConfigDataByID =
         CredentialDetailsService.getInstance().getSavedConfigDataByID(projectID);
     if (savedConfigDataByID != null) {
@@ -186,8 +194,9 @@ public class MouseHoverHandler {
               savedConfigDataByID.getOrgId(),
               savedConfigDataByID.getApiKey(),
               savedConfigDataByID.getServiceKey());
+
       worker =
-          new SwingWorker<Void, Void>() {
+          new SwingWorker<>() {
             @Override
             protected Void doInBackground() throws Exception {
               Vulnerability vulnerability =
@@ -203,7 +212,7 @@ public class MouseHoverHandler {
           };
       worker.execute();
     } else {
-      log.error("No saved creds found");
+      log.error("No saved credentials found for project: {}", projectID);
     }
   }
 }

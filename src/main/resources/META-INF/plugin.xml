@@ -32,7 +32,7 @@
 
     <change-notes>
         <![CDATA[
-        <p>This is the launch of Contrast Securities IntelliJ IDE plugin, version 1.0.0. The following represent the features and capabilities in the initial release</p>
+        <p>This is the launch of Contrast Securities IntelliJ IDE plugin, version 1.0.1. The following represent the features and capabilities in the initial release</p>
         <ul>
         <li><strong>Added support for Contrast Assess Interactive Application Security Testing (IAST)</strong></li>
         <li><strong>Added support for Contrast Scan Static Application Security Testing (SAST)</strong></li>
@@ -92,5 +92,5 @@
         <iw.actionProvider implementation="com.contrastsecurity.plugin.inspection.EditorWidgetActionProvider"/>
     </extensions>
     <!-- Plugin compatibility range -->
-    <idea-version since-build="242.20224.300" until-build="243.*"/>
+    <idea-version since-build="242.20224.300" until-build="251.*"/>
 </idea-plugin>

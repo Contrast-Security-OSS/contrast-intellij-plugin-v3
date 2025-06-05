@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, OSS.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
 package com.contrastsecurity.plugin.components;
 
@@ -30,6 +30,7 @@ import com.contrastsecurity.plugin.service.CacheDataService;
 import com.contrastsecurity.plugin.service.SubMenuCacheService;
 import com.contrastsecurity.plugin.toolwindow.ContrastToolWindow;
 import com.contrastsecurity.plugin.tree.ReportTreeCellRenderer;
+import com.contrastsecurity.plugin.utility.ComponentUtil;
 import com.contrastsecurity.plugin.utility.CredentialUtil;
 import com.contrastsecurity.plugin.utility.LocalizationUtil;
 import com.contrastsecurity.plugin.utility.PopupUtil;
@@ -178,6 +179,9 @@ public class AssessComponent extends JBPanel {
     configureCurrentFileContainer();
     configureVulnerabilityReportPanel();
     configureTabsPanel();
+    ComponentUtil.defaultToPanelOnMouseClick(retrieveVulnerabilityContainer);
+    ComponentUtil.defaultToPanelOnMouseClick(currentFileContainer);
+    ComponentUtil.defaultToPanelOnMouseClick(vulnerabilityReportContainer);
   }
 
   private void configureTabsPanel() {

@@ -1,13 +1,15 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, OSS.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+
 package com.contrastsecurity.plugin.components;
 
 import com.contrastsecurity.plugin.constants.Constants;
 import com.contrastsecurity.plugin.constants.ContrastIcons;
 import com.contrastsecurity.plugin.models.SubMenuDTO;
 import com.contrastsecurity.plugin.service.CacheDataService;
+import com.contrastsecurity.plugin.utility.ComponentUtil;
 import com.contrastsecurity.plugin.utility.LocalizationUtil;
 import com.contrastsecurity.plugin.utility.PopupUtil;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -88,6 +90,12 @@ public class SubMenuComponent extends JBPanel {
     add(subMenuTabs, BorderLayout.CENTER);
     configureRedirectionContainer();
     add(redirectionContainer, BorderLayout.EAST);
+    ComponentUtil.defaultToPanelOnMouseClick(overviewComponent);
+    ComponentUtil.defaultToPanelOnMouseClick(howToFixComponent);
+    ComponentUtil.defaultToPanelOnMouseClick(httpRequestComponent);
+    ComponentUtil.defaultToPanelOnMouseClick(eventsComponent);
+    ComponentUtil.defaultToPanelOnMouseClick(tagComponent);
+    ComponentUtil.defaultToPanelOnMouseClick(markAsComponent);
   }
 
   private void configureTabbedPanels() {

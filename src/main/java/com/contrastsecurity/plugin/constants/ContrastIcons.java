@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright © 2024 Contrast Security, Inc.
- * See https://www.contrastsecurity.com/enduser-terms-0317a for more details.
+ * Copyright © 2025 Contrast Security, OSS.
+ * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
 
 package com.contrastsecurity.plugin.constants;
@@ -36,6 +36,8 @@ public class ContrastIcons {
       IconLoader.getIcon("icons/java.png", ContrastIcons.class);
   public static final Icon REFRESH = IconLoader.getIcon("icons/refresh.png", ContrastIcons.class);
   public static final Icon CONTRAST =
+      IconLoader.getIcon("icons/toolwindowIcon.png", ContrastIcons.class);
+  public static final Icon CONTRAST_DARK =
       IconLoader.getIcon("icons/toolwindowIcon.png", ContrastIcons.class);
   public static final Icon GREEN_SERVERITY =
       IconLoader.getIcon("icons/greenSeverity.png", ContrastIcons.class);
