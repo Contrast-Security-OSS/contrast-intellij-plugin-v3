@@ -101,7 +101,7 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("242.20224.300")  // Set the minimum supported IntelliJ IDEA build
+        sinceBuild.set("243.21565.193")  // Set the minimum supported IntelliJ IDEA build
         untilBuild.set("251.*")           // Set the maximum supported IntelliJ IDEA build
     }
 }

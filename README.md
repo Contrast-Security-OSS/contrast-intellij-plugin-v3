@@ -2,7 +2,7 @@
 
 ### Prerequisites ###
 
-* IntelliJ IDEA version 23.3 or later (either Community Edition) must be installed on your computer.
+* IntelliJ IDEA version 24.3 or later (either Community Edition) must be installed on your computer.
 * Plugin DevKit plugin must be enabled in IDE. Go to IntelliJ settings => Plugins => search for Plugin DevKit and make
 sure it is enabled.
 * IntelliJ Platform SDK must be configured for your IDEA project. Right click on project folder in IntelliJ => Open
@@ -47,11 +47,12 @@ Contrast IDE Plugin Features
 1. Configuration Setting Screen
 ![Configuration Screen.png](src/main/resources/screens/Configuration%20Screen.png)
 2. About Page
-![About Page.png](../../../../Downloads/IntelliJ%20Screens-20250529T053644Z-1-001/IntelliJ%20Screens/About%20Page.png)![About Page.png](src/main/resources/screens/About%20Page.png)
+![About Page.png](src/main/resources/screens/About%20Page.png)
 
 3. Scan
+
 3.1 Filter
-![Scan Filter.png](../../../../Downloads/IntelliJ%20Screens-20250529T053644Z-1-001/IntelliJ%20Screens/Scan%20Filter.png)![Scan Filter.png](src/main/resources/screens/Scan%20Filter.png)
+![Scan Filter.png](src/main/resources/screens/Scan%20Filter.png)
 
 3.2 Current File
 ![Current File Scan.png](src/main/resources/screens/Current%20File%20Scan.png)
@@ -59,6 +60,7 @@ Contrast IDE Plugin Features
 ![Vulnerability Report Scan.png](src/main/resources/screens/Vulnerability%20Report%20Scan.png)
 
 4. Assess
+
 4.1 Retrieve Vulnerability
 ![Assess Filter.png](src/main/resources/screens/Assess%20Filter.png)
 
