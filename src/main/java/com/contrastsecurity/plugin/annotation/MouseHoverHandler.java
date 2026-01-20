@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright © 2025 Contrast Security, OSS.
+ * Copyright © 2026 Contrast Security, OSS.
  * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+
 package com.contrastsecurity.plugin.annotation;
 
 import com.contrastsecurity.plugin.fetchers.Fetcher;
@@ -18,7 +19,9 @@ import com.intellij.openapi.editor.event.EditorFactoryListener;
 import com.intellij.openapi.editor.event.EditorMouseEvent;
 import com.intellij.openapi.editor.event.EditorMouseListener;
 import com.intellij.openapi.editor.event.EditorMouseMotionListener;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Map;
@@ -33,100 +36,102 @@ public class MouseHoverHandler {
 
   private boolean isPopupShown;
   private boolean isMouseOverPopup;
-  private Map<Integer, AnnotationPopupDTO> popupDTOMap;
+  private final Map<VirtualFile, Map<Integer, AnnotationPopupDTO>> popupDTOMap;
   private EditorMouseEvent currentEvent;
-  private Timer popupTimer;
+  private Editor currentEditor;
+  private final Timer popupTimer;
   private SwingWorker<Void, Void> worker;
   private final AnnotationPopup annotationPopup;
-  private static final int POPUP_DELAY_MS = 2000;
-
+  private static final int POPUP_DELAY_MS = 600;
   private final Project project;
 
-  public MouseHoverHandler(Map<Integer, AnnotationPopupDTO> popupDTOMap, Project project) {
+  public MouseHoverHandler(Map<VirtualFile, Map<Integer, AnnotationPopupDTO>> popupDTOMap, Project project) {
     this.project = project;
     this.popupDTOMap = popupDTOMap;
     this.annotationPopup = new AnnotationPopup();
     this.popupTimer = new Timer(POPUP_DELAY_MS, e -> showPopupForEvent(currentEvent));
-    popupTimer.setRepeats(false);
+    this.popupTimer.setRepeats(false);
   }
 
-  /** Adds listeners to all editors including detached windows */
+  /** Adds hover listeners to all current and future editors */
   public void addMouseHoverListener() {
     EditorFactory factory = EditorFactory.getInstance();
-
-    // 1. Attach to all currently open editors
     for (Editor editor : factory.getAllEditors()) {
       if (editor.getProject() == project) {
         addHoverListenersToEditor(editor);
       }
     }
-
-    // 2. Attach to all future editors
     factory.addEditorFactoryListener(
-        new EditorFactoryListener() {
-          @Override
-          public void editorCreated(@NotNull EditorFactoryEvent event) {
-            Editor editor = event.getEditor();
-            if (editor.getProject() == project) {
-              addHoverListenersToEditor(editor);
-            }
-          }
-
-          @Override
-          public void editorReleased(@NotNull EditorFactoryEvent event) {
-            // Optional: clean up if needed
-          }
-        },
-        project // ensures listener is removed when project is disposed
-        );
+            new EditorFactoryListener() {
+              @Override
+              public void editorCreated(@NotNull EditorFactoryEvent event) {
+                Editor editor = event.getEditor();
+                if (editor.getProject() == project) {
+                  addHoverListenersToEditor(editor);
+                }
+              }
+            },
+            project);
   }
 
   private void addHoverListenersToEditor(Editor editor) {
     editor.addEditorMouseMotionListener(
-        new EditorMouseMotionListener() {
-          @Override
-          public void mouseMoved(@NotNull EditorMouseEvent e) {
-            int offset = e.getOffset();
-            int line = editor.getDocument().getLineNumber(offset);
-
-            if (popupDTOMap.containsKey(line)) {
-              currentEvent = e;
-              if (!isPopupShown) {
-                popupTimer.restart();
+            new EditorMouseMotionListener() {
+              @Override
+              public void mouseMoved(@NotNull EditorMouseEvent e) {
+                VirtualFile file =
+                        FileDocumentManager.getInstance().getFile(editor.getDocument());
+                if (file == null) {
+                  hidePopupIfShown();
+                  return;
+                }
+                Map<Integer, AnnotationPopupDTO> fileMap = popupDTOMap.get(file);
+                if (fileMap == null || fileMap.isEmpty()) {
+                  hidePopupIfShown();
+                  return;
+                }
+                int line = editor.xyToLogicalPosition(e.getMouseEvent().getPoint()).line;
+                if (fileMap.containsKey(line)) {
+                  currentEvent = e;
+                  currentEditor = editor;
+                  if (!popupTimer.isRunning() && !isPopupShown) {
+                    popupTimer.restart();
+                  }
+                } else {
+                  hidePopupIfShown();
+                  popupTimer.stop();
+                }
               }
-            } else {
-              hidePopupIfShown();
-              popupTimer.stop();
-            }
-          }
-        },
-        project);
-
+            },
+            project);
     editor.addEditorMouseListener(
-        new EditorMouseListener() {
-          @Override
-          public void mouseClicked(@NotNull EditorMouseEvent e) {
-            hidePopupIfShown();
-            popupTimer.stop();
-          }
-        },
-        project);
+            new EditorMouseListener() {
+              @Override
+              public void mouseClicked(@NotNull EditorMouseEvent e) {
+                hidePopupIfShown();
+                popupTimer.stop();
+              }
+            },
+            project);
   }
 
   private void showPopupForEvent(EditorMouseEvent e) {
-    if (popupDTOMap.isEmpty()) return;
-
-    int offset = e.getOffset();
+    if (e == null || currentEditor == null) return;
     Editor editor = e.getEditor();
-    int line = editor.getDocument().getLineNumber(offset);
-
-    AnnotationPopupDTO dto = popupDTOMap.get(line);
-    if (dto != null) {
-      if (StringUtils.isNotEmpty(dto.getAdvice())) {
-        invokePopup(dto, e);
-      } else {
-        loadScanAdvice(dto, e);
-      }
+    VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
+    VirtualFile expectedFile = FileDocumentManager.getInstance().getFile(currentEditor.getDocument());
+    if (file == null || expectedFile == null || !file.equals(expectedFile)) {
+      return;
+    }
+    Map<Integer, AnnotationPopupDTO> fileMap = popupDTOMap.get(file);
+    if (fileMap == null || fileMap.isEmpty()) return;
+    int line = editor.xyToLogicalPosition(e.getMouseEvent().getPoint()).line;
+    AnnotationPopupDTO dto = fileMap.get(line);
+    if (dto == null) return;
+    if (StringUtils.isNotEmpty(dto.getAdvice())) {
+      invokePopup(dto, e);
+    } else {
+      loadScanAdvice(dto, e);
     }
   }
 
@@ -138,81 +143,81 @@ public class MouseHoverHandler {
     }
   }
 
+  private void invokePopup(AnnotationPopupDTO dto, EditorMouseEvent e) {
+    annotationPopup.hidePopUp();
+    annotationPopup.showAnnotationPopup(
+            dto,
+            e.getMouseEvent(),
+            new MouseAdapter() {
+              @Override
+              public void mouseEntered(MouseEvent e) {
+                isMouseOverPopup = true;
+              }
+
+              @Override
+              public void mouseExited(MouseEvent e) {
+                isMouseOverPopup = false;
+                if (!isMouseOverLine(currentEvent)) {
+                  hidePopupIfShown();
+                }
+              }
+            });
+    isPopupShown = true;
+  }
+
+  private boolean isMouseOverLine(EditorMouseEvent e) {
+    if (e == null) return false;
+    Editor editor = e.getEditor();
+    VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
+    if (file == null) return false;
+    Map<Integer, AnnotationPopupDTO> fileMap = popupDTOMap.get(file);
+    if (fileMap == null) return false;
+    int line = editor.xyToLogicalPosition(e.getMouseEvent().getPoint()).line;
+    return fileMap.containsKey(line);
+  }
+
   private void loadScanAdvice(AnnotationPopupDTO dto, EditorMouseEvent e) {
     SubMenuCacheService subMenuCacheService = new SubMenuCacheService();
     Object cache = subMenuCacheService.get(dto.getProjectId() + "-" + dto.getVulnerabilityId());
     if (cache instanceof Vulnerability vulnerability) {
-      String risk = vulnerability.getRisk();
-      dto.setAdvice(StringUtils.defaultIfEmpty(risk, "No Advice found"));
+      dto.setAdvice(StringUtils.defaultIfEmpty(vulnerability.getRisk(), "No Advice found"));
       invokePopup(dto, e);
     } else {
       makeAPICall(dto.getProjectId(), dto.getVulnerabilityId(), dto, e);
     }
   }
 
-  private void invokePopup(AnnotationPopupDTO dto, EditorMouseEvent e) {
-    annotationPopup.hidePopUp();
-    annotationPopup.showAnnotationPopup(
-        dto,
-        e.getMouseEvent(),
-        new MouseAdapter() {
-          @Override
-          public void mouseEntered(MouseEvent e) {
-            isMouseOverPopup = true;
-          }
-
-          @Override
-          public void mouseExited(MouseEvent e) {
-            isMouseOverPopup = false;
-            if (!isMouseOverLine(currentEvent)) {
-              hidePopupIfShown();
-            }
-          }
-        });
-    isPopupShown = true;
-  }
-
-  private boolean isMouseOverLine(EditorMouseEvent e) {
-    int offset = e.getOffset();
-    Editor editor = e.getEditor();
-    int line = editor.getDocument().getLineNumber(offset);
-    return popupDTOMap.containsKey(line);
-  }
-
   private void makeAPICall(
-      String projectID, String vulnerabilityID, AnnotationPopupDTO dto, EditorMouseEvent e) {
+          String projectID,
+          String vulnerabilityID,
+          AnnotationPopupDTO dto,
+          EditorMouseEvent e) {
     if (worker != null) return;
-
-    ConfigurationDTO savedConfigDataByID =
-        CredentialDetailsService.getInstance().getSavedConfigDataByID(projectID);
-    if (savedConfigDataByID != null) {
-      savedConfigDataByID = CredentialUtil.decryptDTO(savedConfigDataByID);
-      Fetcher fetcher =
-          new Fetcher(
-              savedConfigDataByID.getUserName(),
-              savedConfigDataByID.getContrastURL(),
-              savedConfigDataByID.getOrgId(),
-              savedConfigDataByID.getApiKey(),
-              savedConfigDataByID.getServiceKey());
-
-      worker =
-          new SwingWorker<>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-              Vulnerability vulnerability =
-                  fetcher.getProjectVulnerabilityById(projectID, vulnerabilityID);
-              if (vulnerability != null) {
-                SubMenuCacheService subMenuCacheService = new SubMenuCacheService();
-                subMenuCacheService.add(projectID + "-" + vulnerabilityID, vulnerability);
-                dto.setAdvice(vulnerability.getRisk());
-                invokePopup(dto, e);
-              }
-              return null;
-            }
-          };
-      worker.execute();
-    } else {
+    ConfigurationDTO savedConfigDataByID = CredentialDetailsService.getInstance().getSavedConfigDataByID(projectID);
+    if (savedConfigDataByID == null) {
       log.error("No saved credentials found for project: {}", projectID);
+      return;
     }
+    savedConfigDataByID = CredentialUtil.decryptDTO(savedConfigDataByID);
+    Fetcher fetcher = new Fetcher(
+            savedConfigDataByID.getUserName(),
+            savedConfigDataByID.getContrastURL(),
+            savedConfigDataByID.getOrgId(),
+            savedConfigDataByID.getApiKey(),
+            savedConfigDataByID.getServiceKey()
+    );
+    worker = new SwingWorker<>() {
+      @Override
+      protected Void doInBackground() throws Exception {
+        Vulnerability vulnerability = fetcher.getProjectVulnerabilityById(projectID, vulnerabilityID);
+        if (vulnerability != null) {
+          new SubMenuCacheService().add(projectID + "-" + vulnerabilityID, vulnerability);
+          dto.setAdvice(vulnerability.getRisk());
+          invokePopup(dto, e);
+        }
+        return null;
+      }
+    };
+    worker.execute();
   }
 }

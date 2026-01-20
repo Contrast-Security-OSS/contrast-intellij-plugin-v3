@@ -1,4 +1,12 @@
 # Change Log
+## [1.0.2]- 2026-12-01
+- Displayed a 15-second popup message for user convenience while validating credentials.
+- Added field-level validation on the configuration page to notify users when required fields are empty.
+- Implemented a Cancel button on the configuration page to clear entered data.
+- Enabled display of detailed vulnerability information when hovering over a vulnerability in the current file.
+- Disabled the OK button by default in the Tag tab.
+- In the Status tab, when the status is set to “Not a Problem”, the Comment text box is mandatory, and the OK button remains disabled until a comment is entered.
+
 
 ## [1.0.1]- 2025-27-05
 ### Added

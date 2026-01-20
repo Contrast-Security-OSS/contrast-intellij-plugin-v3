@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright © 2025 Contrast Security, OSS.
+ * Copyright © 2026 Contrast Security, OSS.
  * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+
 package com.contrastsecurity.plugin.annotation;
 
 import com.contrastsecurity.plugin.toolwindow.ContrastToolWindow;
@@ -42,24 +43,17 @@ public class CustomLineMarkerProvider implements LineMarkerProvider {
   @Override
   public @Nullable LineMarkerInfo<?> getLineMarkerInfo(@NotNull PsiElement element) {
     Project project = element.getProject();
-
-    // Defensive: skip if element is too large or document is inconsistent
     VirtualFile file = PsiUtilCore.getVirtualFile(element);
     if (file == null) return null;
-
     loadCurrentFileVulnerabilities(project, file);
-
     FileEditor[] editors = FileEditorManager.getInstance(project).getEditors(file);
     if (editors.length == 0) return null;
-
     for (FileEditor fileEditor : editors) {
       if (!(fileEditor instanceof TextEditor)) continue;
       Editor editor = ((TextEditor) fileEditor).getEditor();
       Document document = editor.getDocument();
-
       int offset = element.getTextOffset();
       if (offset < 0 || offset >= document.getTextLength()) continue;
-
       int lineNumber = document.getLineNumber(offset);
       if (CollectionUtils.isNotEmpty(lineNumbers) && lineNumbers.contains(lineNumber)) {
         addSquigglyLine(editor, element);
@@ -72,113 +66,105 @@ public class CustomLineMarkerProvider implements LineMarkerProvider {
   private void addSquigglyLine(Editor editor, PsiElement element) {
     Document document = editor.getDocument();
     MarkupModel markupModel = editor.getMarkupModel();
-
-    int startOffset = element.getTextRange().getStartOffset();
-    int endOffset = element.getTextRange().getEndOffset();
-
-    if (startOffset < 0 || endOffset > document.getTextLength()) return;
-
-    CharSequence fullText = document.getCharsSequence().subSequence(startOffset, endOffset);
-
-    // Trim leading and trailing whitespace
-    int relativeStart = -1, relativeEnd = -1;
-    for (int i = 0; i < fullText.length(); i++) {
-      if (!Character.isWhitespace(fullText.charAt(i))) {
+    int offset = element.getTextOffset();
+    if (offset < 0 || offset >= document.getTextLength()) return;
+    int lineNumber = document.getLineNumber(offset);
+    int lineStartOffset = document.getLineStartOffset(lineNumber);
+    int lineEndOffset = document.getLineEndOffset(lineNumber);
+    if (lineStartOffset < 0 || lineEndOffset > document.getTextLength()) {
+      return;
+    }
+    CharSequence lineText = document.getCharsSequence().subSequence(lineStartOffset, lineEndOffset);
+    int relativeStart = -1;
+    int relativeEnd = -1;
+    for (int i = 0; i < lineText.length(); i++) {
+      if (!Character.isWhitespace(lineText.charAt(i))) {
         relativeStart = i;
         break;
       }
     }
-    for (int i = fullText.length() - 1; i >= 0; i--) {
-      if (!Character.isWhitespace(fullText.charAt(i))) {
+    for (int i = lineText.length() - 1; i >= 0; i--) {
+      if (!Character.isWhitespace(lineText.charAt(i))) {
         relativeEnd = i + 1;
         break;
       }
     }
-
-    if (relativeStart == -1 || relativeEnd == -1 || relativeStart >= relativeEnd) return;
-
-    int actualStart = startOffset + relativeStart;
-    int actualEnd = startOffset + relativeEnd;
-
+    if (relativeStart == -1 || relativeEnd == -1 || relativeStart >= relativeEnd) {
+      return;
+    }
+    int actualStart = lineStartOffset + relativeStart;
+    int actualEnd = lineStartOffset + relativeEnd;
     TextAttributes attributes = new TextAttributes();
-    attributes.setEffectColor(new Color(255, 204, 0)); // Yellow squiggly
+    attributes.setEffectColor(new Color(255, 204, 0));
     attributes.setEffectType(EffectType.WAVE_UNDERSCORE);
-
     markupModel.addRangeHighlighter(
-        actualStart,
-        actualEnd,
-        HighlighterLayer.WEAK_WARNING,
-        attributes,
-        HighlighterTargetArea.EXACT_RANGE);
+            actualStart,
+            actualEnd,
+            HighlighterLayer.WEAK_WARNING,
+            attributes,
+            HighlighterTargetArea.EXACT_RANGE);
   }
 
   private void loadCurrentFileVulnerabilities(@NotNull Project project, @NotNull VirtualFile file) {
     ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
     ToolWindow contrastWindow = toolWindowManager.getToolWindow("Contrast");
     if (contrastWindow == null) return;
-
     Content content = contrastWindow.getContentManager().getContent(0);
     if (content == null) return;
-
     JComponent component = content.getComponent();
     if (!(component instanceof ContrastToolWindow)) return;
-
     ContrastToolWindow contrastToolWindow = (ContrastToolWindow) component;
     String fileName = file.getPath();
     if (StringUtils.isEmpty(fileName)) return;
-
     List<Integer> newLines = new ArrayList<>();
-
     if (contrastToolWindow.getAssessComponent() != null) {
       FileVulnerabilitiesUtil assessUtil =
-          new FileVulnerabilitiesUtil(fileName, contrastToolWindow.getAssessComponent());
+              new FileVulnerabilitiesUtil(fileName, contrastToolWindow.getAssessComponent());
       if (CollectionUtils.isNotEmpty(assessUtil.getLineNumbers())) {
         newLines.addAll(assessUtil.getLineNumbers());
       }
     }
-
     if (contrastToolWindow.getScanComponent() != null) {
       FileVulnerabilitiesUtil scanUtil =
-          new FileVulnerabilitiesUtil(fileName, contrastToolWindow.getScanComponent());
+              new FileVulnerabilitiesUtil(fileName, contrastToolWindow.getScanComponent());
       if (CollectionUtils.isNotEmpty(scanUtil.getLineNumbers())) {
         newLines.addAll(scanUtil.getLineNumbers());
       }
     }
-
     lineNumbers = newLines;
   }
 
   /** Refreshes the annotated line number after fetching new set of data */
   public void refresh(Project project) {
     ApplicationManager.getApplication()
-        .invokeLater(
-            () -> {
-              ApplicationManager.getApplication()
-                  .runReadAction(
-                      () -> {
-                        FileEditorManager fileEditorManager =
-                            FileEditorManager.getInstance(project);
-                        VirtualFile[] openFiles = fileEditorManager.getOpenFiles();
+            .invokeLater(
+                    () -> {
+                      ApplicationManager.getApplication()
+                              .runReadAction(
+                                      () -> {
+                                        FileEditorManager fileEditorManager =
+                                                FileEditorManager.getInstance(project);
+                                        VirtualFile[] openFiles = fileEditorManager.getOpenFiles();
 
-                        if (openFiles.length == 0) return;
+                                        if (openFiles.length == 0) return;
 
-                        VirtualFile selectedFile =
-                            fileEditorManager.getSelectedFiles().length > 0
-                                ? fileEditorManager.getSelectedFiles()[0]
-                                : null;
+                                        VirtualFile selectedFile =
+                                                fileEditorManager.getSelectedFiles().length > 0
+                                                        ? fileEditorManager.getSelectedFiles()[0]
+                                                        : null;
 
-                        for (VirtualFile file : openFiles) {
-                          fileEditorManager.closeFile(file);
-                        }
+                                        for (VirtualFile file : openFiles) {
+                                          fileEditorManager.closeFile(file);
+                                        }
 
-                        for (VirtualFile file : openFiles) {
-                          fileEditorManager.openFile(file, false);
-                        }
+                                        for (VirtualFile file : openFiles) {
+                                          fileEditorManager.openFile(file, false);
+                                        }
 
-                        if (selectedFile != null && fileEditorManager.isFileOpen(selectedFile)) {
-                          fileEditorManager.openFile(selectedFile, true); // re-focus selected file
-                        }
-                      });
-            });
+                                        if (selectedFile != null && fileEditorManager.isFileOpen(selectedFile)) {
+                                          fileEditorManager.openFile(selectedFile, true);
+                                        }
+                                      });
+                    });
   }
 }

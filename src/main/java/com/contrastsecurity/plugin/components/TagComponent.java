@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2025 Contrast Security, OSS.
+ * Copyright © 2026 Contrast Security, OSS.
  * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
 
@@ -76,7 +76,7 @@ public class TagComponent extends JBPanel {
   private final transient PopupUtil popupUtil;
 
   public TagComponent(
-      List<String> tagsInOrganization, String appID, String traceID, Project project) {
+          List<String> tagsInOrganization, String appID, String traceID, Project project) {
     tagsToRemove = new ArrayList<>();
     isPopulated = false;
     this.tagsInOrgCopy = tagsInOrganization;
@@ -97,18 +97,18 @@ public class TagComponent extends JBPanel {
     String[] columnName = {"Tag"};
 
     tableModel =
-        new DefaultTableModel(columnName, 0) {
-          @Override
-          public boolean isCellEditable(int row, int column) {
-            return false;
-          }
-        };
+            new DefaultTableModel(columnName, 0) {
+              @Override
+              public boolean isCellEditable(int row, int column) {
+                return false;
+              }
+            };
     tagsTable = new JBTable(tableModel);
     tagsTable.getTableHeader().setReorderingAllowed(false);
     tagsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     tagsTable
-        .getSelectionModel()
-        .addListSelectionListener(e -> enable = tagsTable.getSelectedRow() >= 0);
+            .getSelectionModel()
+            .addListSelectionListener(e -> enable = tagsTable.getSelectedRow() >= 0);
     tableScrollPane = new JBScrollPane(tagsTable);
     enable = false;
 
@@ -130,26 +130,27 @@ public class TagComponent extends JBPanel {
   private void configureExistingTagContainer() {
     existingTagContainer.removeAll();
     JBLabel existingTagLabel =
-        new JBLabel(localizationUtil.getMessage(Constants.EXISTING_TAG_LABEL));
+            new JBLabel(localizationUtil.getMessage(Constants.EXISTING_TAG_LABEL));
     existingTagLabel.setPreferredSize(new Dimension(200, 30));
     existingTagContainer.add(existingTagLabel);
 
     existingTagComboBox = new ComboBox();
     existingTagComboBox.addActionListener(
-        e -> {
-          if (isPopulated) return;
-          Object selectedItem = existingTagComboBox.getSelectedItem();
-          if (selectedItem != null) {
-            if (tagsToRemove.contains(selectedItem.toString()))
-              tagsToRemove.remove(selectedItem.toString());
-            if (!doesExistsInTable(selectedItem.toString())) {
-              tableModel.addRow(new Object[] {selectedItem.toString()});
-              existingTagComboBox.removeItem(selectedItem);
-            }
-            createField.setText(StringUtils.EMPTY);
-            tagsTable.clearSelection();
-          }
-        });
+            e -> {
+              if (isPopulated) return;
+              Object selectedItem = existingTagComboBox.getSelectedItem();
+              if (selectedItem != null) {
+                if (tagsToRemove.contains(selectedItem.toString()))
+                  tagsToRemove.remove(selectedItem.toString());
+                if (!doesExistsInTable(selectedItem.toString())) {
+                  okButton.setEnabled(true);
+                  tableModel.addRow(new Object[] {selectedItem.toString()});
+                  existingTagComboBox.removeItem(selectedItem);
+                }
+                createField.setText(StringUtils.EMPTY);
+                tagsTable.clearSelection();
+              }
+            });
     loadComboBoxWithTags();
     existingTagComboBox.setPreferredSize(new Dimension(200, 30));
     existingTagContainer.add(existingTagComboBox);
@@ -172,25 +173,25 @@ public class TagComponent extends JBPanel {
 
     DefaultActionGroup actions = new DefaultActionGroup();
     AnAction deleteAction =
-        new AnAction(ContrastIcons.DELETE_ICON) {
-          @Override
-          public void actionPerformed(@NotNull AnActionEvent e) {
-            deleteActionOnClick();
-          }
+            new AnAction(ContrastIcons.DELETE_ICON) {
+              @Override
+              public void actionPerformed(@NotNull AnActionEvent e) {
+                deleteActionOnClick();
+              }
 
-          @Override
-          public @NotNull ActionUpdateThread getActionUpdateThread() {
-            return ActionUpdateThread.EDT;
-          }
+              @Override
+              public @NotNull ActionUpdateThread getActionUpdateThread() {
+                return ActionUpdateThread.EDT;
+              }
 
-          @Override
-          public void update(@NotNull AnActionEvent e) {
-            e.getPresentation().setEnabled(enable);
-          }
-        };
+              @Override
+              public void update(@NotNull AnActionEvent e) {
+                e.getPresentation().setEnabled(enable);
+              }
+            };
     actions.add(deleteAction);
     ActionToolbar actionToolbar =
-        ActionManager.getInstance().createActionToolbar(ActionPlaces.TOOLBAR, actions, true);
+            ActionManager.getInstance().createActionToolbar(ActionPlaces.TOOLBAR, actions, true);
     actionToolbar.setTargetComponent(actionToolbar.getComponent());
     newTagContainer.add(actionToolbar.getComponent());
 
@@ -212,6 +213,7 @@ public class TagComponent extends JBPanel {
   private void configureProcessingContainer() {
     processingContainer.removeAll();
 
+    okButton.setEnabled(false);
     okButton.addActionListener(e -> okButtonOnClick());
     processingContainer.add(okButton);
 
@@ -233,6 +235,7 @@ public class TagComponent extends JBPanel {
       //
       showErrorPopup(localizationUtil.getMessage(Constants.MESSAGES.SELECT_TAG_FROM_DROPDOWN));
     } else if (StringUtils.isNotEmpty(inputTag)) {
+      okButton.setEnabled(true);
       tableModel.addRow(new Object[] {inputTag});
     }
     createField.setText(StringUtils.EMPTY);
@@ -250,6 +253,7 @@ public class TagComponent extends JBPanel {
       if (!tagsToRemove.contains(selectedTag)) {
         tagsToRemove.add(selectedTag);
       }
+      okButton.setEnabled(true);
       tableModel.removeRow(selectedRow);
       tagsTable.clearSelection();
     }
@@ -265,37 +269,37 @@ public class TagComponent extends JBPanel {
     if (dto != null) {
       dto = CredentialUtil.decryptDTO(dto);
       Fetcher fetcher =
-          new Fetcher(
-              dto.getUserName(),
-              dto.getContrastURL(),
-              dto.getOrgId(),
-              dto.getApiKey(),
-              dto.getServiceKey());
+              new Fetcher(
+                      dto.getUserName(),
+                      dto.getContrastURL(),
+                      dto.getOrgId(),
+                      dto.getApiKey(),
+                      dto.getServiceKey());
       String requestBody = getTagRequestBody();
       worker =
-          new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-              okButton.setEnabled(false);
-              if (fetcher.tagVulnerability(requestBody)) {
-                showSuccessPopup(
-                    localizationUtil.getMessage(Constants.MESSAGES.TAGGED_VULNERABILITY));
-              } else {
-                showErrorPopup(localizationUtil.getMessage(Constants.MESSAGES.FAILED_TO_TAG));
-              }
-              return null;
-            }
+              new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                  okButton.setEnabled(false);
+                  if (fetcher.tagVulnerability(requestBody)) {
+                    showSuccessPopup(
+                            localizationUtil.getMessage(Constants.MESSAGES.TAGGED_VULNERABILITY));
+                  } else {
+                    showErrorPopup(localizationUtil.getMessage(Constants.MESSAGES.FAILED_TO_TAG));
+                  }
+                  return null;
+                }
 
-            @Override
-            protected void done() {
-              okButton.setEnabled(true);
-              CacheDataService cacheDataService = new CacheDataService();
-              cacheDataService.add(
-                  traceId + "-" + Constants.UTILS.TAGS_IN_VUL, tagsInVulnerability);
-              cacheDataService.add(
-                  appId + "-" + Constants.UTILS.EXISTING_TAGS_IN_ORG, tagsInOrgCopy);
-            }
-          };
+                @Override
+                protected void done() {
+                  okButton.setEnabled(false);
+                  CacheDataService cacheDataService = new CacheDataService();
+                  cacheDataService.add(
+                          traceId + "-" + Constants.UTILS.TAGS_IN_VUL, tagsInVulnerability);
+                  cacheDataService.add(
+                          appId + "-" + Constants.UTILS.EXISTING_TAGS_IN_ORG, tagsInOrgCopy);
+                }
+              };
     } else {
       showErrorPopup(localizationUtil.getMessage(Constants.MESSAGES.FAILED_TO_TAG));
     }
@@ -311,12 +315,12 @@ public class TagComponent extends JBPanel {
     tableModel.setRowCount(0);
     if (CollectionUtils.isNotEmpty(tagsInVulnerability)) {
       tagsInVulnerability.forEach(
-          e -> {
-            if (StringUtils.isNotEmpty(e.trim())) {
-              tableModel.addRow(new Object[] {StringUtils.normalizeSpace(e.trim())});
-              tagsInOrg.remove(e);
-            }
-          });
+              e -> {
+                if (StringUtils.isNotEmpty(e.trim())) {
+                  tableModel.addRow(new Object[] {StringUtils.normalizeSpace(e.trim())});
+                  tagsInOrg.remove(e);
+                }
+              });
     }
   }
 
@@ -325,11 +329,11 @@ public class TagComponent extends JBPanel {
     existingTagComboBox.removeAllItems();
     if (CollectionUtils.isNotEmpty(tagsInOrg)) {
       tagsInOrg.forEach(
-          e -> {
-            if (StringUtils.isNotEmpty(e.trim())) {
-              existingTagComboBox.addItem(StringUtils.normalizeSpace(e.trim()));
-            }
-          });
+              e -> {
+                if (StringUtils.isNotEmpty(e.trim())) {
+                  existingTagComboBox.addItem(StringUtils.normalizeSpace(e.trim()));
+                }
+              });
     }
     isPopulated = false;
   }
@@ -384,11 +388,11 @@ public class TagComponent extends JBPanel {
   private void verifyTags() {
     if (CollectionUtils.isNotEmpty(tagsToRemove)) {
       tagsToRemove.forEach(
-          tag -> {
-            if (tagsInVulnerability.contains(tag)) {
-              tagsInVulnerability.remove(tag);
-            }
-          });
+              tag -> {
+                if (tagsInVulnerability.contains(tag)) {
+                  tagsInVulnerability.remove(tag);
+                }
+              });
     }
   }
 
@@ -404,7 +408,7 @@ public class TagComponent extends JBPanel {
   }
 
   public void refresh(
-      List<String> tagsInVulnerability, List<String> tagsInOrg, String appID, String traceID) {
+          List<String> tagsInVulnerability, List<String> tagsInOrg, String appID, String traceID) {
     tagsToRemove = new ArrayList<>();
     this.traceId = traceID;
     this.appId = appID;
