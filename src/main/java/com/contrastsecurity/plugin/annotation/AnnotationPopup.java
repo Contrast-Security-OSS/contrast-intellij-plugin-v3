@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright © 2025 Contrast Security, OSS.
+ * Copyright © 2026 Contrast Security, OSS.
  * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
+
 package com.contrastsecurity.plugin.annotation;
 
 import static com.contrastsecurity.plugin.constants.Constants.ANNOTATION_POPUP.ACTION_FORMAT;

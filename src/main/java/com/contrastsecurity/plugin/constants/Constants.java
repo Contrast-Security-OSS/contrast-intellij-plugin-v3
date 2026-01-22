@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2025 Contrast Security, OSS.
+ * Copyright © 2026 Contrast Security, OSS.
  * See https://www.contrastsecurity.com/enduser-terms for more details.
  *******************************************************************************/
 
@@ -95,11 +95,11 @@ public class Constants {
     public static final String LOCATION_NOT_FOUND = "Location not found";
     public static final String ERROR_FETCHING_VULNERABILITIES = "Error Fetching Vulnerabilities";
     public static final String ERROR_WHILE_LOADING_SERVERS_AND_BUILD_NUMBERS =
-        "Error while loading servers and build numbers";
+            "Error while loading servers and build numbers";
     public static final String LOADING_WAS_CANCELLED_OR_ANOTHER_APP_WAS_SELECTED =
-        "Loading was cancelled or another app was selected.";
+            "Loading was cancelled or another app was selected.";
     public static final String UNABLE_TO_MOVE_TO_THE_LINE_NUMBER =
-        "Unable to move to the line number";
+            "Unable to move to the line number";
     public static final String NO_SERVER_FILTER_APPLIED = "No server filter applied";
     public static final String NO_BUILD_NUMBER_APPLIED = "No build number filter applied";
     public static final String NO_CREDENTIALS_CONFIGURED = "No Credentials configured";
@@ -163,7 +163,7 @@ public class Constants {
     public static final String ALREADY_EXISTS = "message.configAlreadyExists";
     public static final String CONFIGURATION_DELETED = "message.configurationDeleted";
     public static final String UNABLE_TO_DELETE_CONFIGURATION =
-        "message.unableToDeleteConfiguration";
+            "message.unableToDeleteConfiguration";
     public static final String LOADING_FILTERS = "message.loadingFilters";
     public static final String RETRIEVING_VULNERABILITIES = "message.retrievingVulnerabilities";
     public static final String NO_VULNERABILITIES_FOUND = "message.noVulnerabilitiesFound";
@@ -172,7 +172,7 @@ public class Constants {
     public static final String RETRIEVE_PROJECT_NAME = "message.retrieveProjectNameBeforeAdding";
     public static final String NO_PROJECT_OPEN = "message.noProjectOpen";
     public static final String NO_CREDENTIAL_CONFIGURE_FOR_PROJECT =
-        "message.noCredentialConfigured";
+            "message.noCredentialConfigured";
     public static final String NO_APPLICATION_CONFIGURED = "message.noApplicationConfigured";
     public static final String SYNC_PROCESS = "message.syncProcess";
     public static final String MARKED_VULNERABILITY = "message.markedVulnerability";
@@ -185,6 +185,13 @@ public class Constants {
     public static final String TAG_ALREADY_APPLIED = "message.tagAlreadyApplied";
     public static final String SELECT_TAG_FROM_DROPDOWN = "message.tagAlreadyAvailable";
     public static final String COMMENT_LIMIT = "message.commentLimit";
+    public static final String URL_CANNOT_BE_EMPTY = "error.url.empty";
+    public static final String USERNAME_CANNOT_BE_EMPTY = "error.username.empty";
+    public static final String SERVICE_KEY_CANNOT_BE_EMPTY = "error.serviceKey.empty";
+    public static final String API_KEY_CANNOT_BE_EMPTY = "error.apiKey.empty";
+    public static final String ORG_ID_CANNOT_BE_EMPTY = "error.orgId.empty";
+    public static final String VALIDATION = "message.validation";
+    public static final String NOT_A_PROBLEM_STATUS = "message.notAProblem";
   }
 
   public static class UTILS {
@@ -222,8 +229,8 @@ public class Constants {
     public static final String PREVIOUS = "<";
     public static final String NEXT = ">";
     public static final String[] MONTHS = {
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
     };
     public static final String[] WEEKS = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
     public static final String ALL = "All";
@@ -234,12 +241,12 @@ public class Constants {
     public static final String LAST_YEAR = "Last Year";
     public static final String CUSTOM = "Custom";
     public static final String[] MARK_AS_COMBOBOX = {
-      CHECKBOXES.REPORTED,
-      CHECKBOXES.SUSPICIOUS,
-      CHECKBOXES.CONFIRMED,
-      CHECKBOXES.NOT_A_PROBLEM,
-      CHECKBOXES.REMEDIATED,
-      CHECKBOXES.FIXED
+            CHECKBOXES.REPORTED,
+            CHECKBOXES.SUSPICIOUS,
+            CHECKBOXES.CONFIRMED,
+            CHECKBOXES.NOT_A_PROBLEM,
+            CHECKBOXES.REMEDIATED,
+            CHECKBOXES.FIXED
     };
     public static final String FALSE_POSITIVE = "False positive";
     public static final String IS_CONTROL = "Goes through an internal security control";
@@ -248,7 +255,7 @@ public class Constants {
     public static final String OTHER = "Other";
 
     public static final String[] REASON_COMBOBOX = {
-      ES_CONTROL, FALSE_POSITIVE, IS_CONTROL, OTHER, URL_ACCESS_LIMITED
+            ES_CONTROL, FALSE_POSITIVE, IS_CONTROL, OTHER, URL_ACCESS_LIMITED
     };
     public static final String CREATION = "Creation";
     public static final String TRIGGER = "Trigger";
@@ -263,11 +270,11 @@ public class Constants {
     private CALENDER_UTIL() {}
 
     public static final String[] TIME =
-        new String[] {
-          "12:00am", "1:00am", "2:00am", "3:00am", "4:00am", "5:00am", "6:00am", "7:00am", "8:00am",
-          "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm", "3:00pm", "4:00pm",
-          "5:00pm", "6:00pm", "7:00pm", "8:00pm", "9:00pm", "10:00pm", "11:00pm"
-        };
+            new String[] {
+                    "12:00am", "1:00am", "2:00am", "3:00am", "4:00am", "5:00am", "6:00am", "7:00am", "8:00am",
+                    "9:00am", "10:00am", "11:00am", "12:00pm", "1:00pm", "2:00pm", "3:00pm", "4:00pm",
+                    "5:00pm", "6:00pm", "7:00pm", "8:00pm", "9:00pm", "10:00pm", "11:00pm"
+            };
   }
 
   public static class TOOL_TIPS {
@@ -281,9 +288,9 @@ public class Constants {
     public static final String SCAN = "tooltip.scan";
     public static final String REFRESH = "tooltip.refresh";
     public static final String CLEARS_SERVERS_AND_BUILD_NUMBERS =
-        "tooltip.clearsServersAndBuildNumbers";
+            "tooltip.clearsServersAndBuildNumbers";
     public static final String REFRESH_SERVERS_AND_BUILD_NUMBERS =
-        "tooltip.refreshServersAndBuildNumbers";
+            "tooltip.refreshServersAndBuildNumbers";
     public static final String CLEARS_ALL_APPLIED_FILTERS = "tooltip.clearsAllAppliedFilters";
     public static final String FETCH_VULNERABILITIES = "tooltip.fetchVulnerabilities";
   }
